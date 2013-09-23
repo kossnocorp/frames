@@ -1,9 +1,7 @@
 #= require jquery_ujs
 #= require jquery.role
-#= require underscore-1.5.1
-#= require backbone-1.0.0
-#= require sugar-1.3.9-custom
-#= require noted-0.1.1
-#= require echoes
-#= require jwerty
-#= require backbone.jwerty
+#= require underscore
+#= require backbone
+#= require sugar
+#= require noted
+#= require echo
