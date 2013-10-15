@@ -21,11 +21,6 @@
     "grunt-contrib-uglify": ""
   },
 
-  "dependencies": {
-    "backbone": "",
-    "sugar": ""
-  },
-
   "engine": {
     "node": ">= 0.10"
   },

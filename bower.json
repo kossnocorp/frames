@@ -1,0 +1,26 @@
+{
+  "name": "frames",
+  "version": "0.1.0",
+  "homepage": "https://github.com/kossnocorp/frames",
+  "authors": [
+    "Sasha Koss <kossnocorp@gmail.com>"
+  ],
+  "description": "Front-end framework",
+
+  "devDependencies": {
+    "modula": ""
+  },
+
+  "dependencies": {
+    "backbone": "",
+    "sugar": ""
+  },
+
+  "license": "MIT",
+  "private": true,
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components"
+  ]
+}
