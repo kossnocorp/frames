@@ -1,0 +1,38 @@
+{
+  "name": "frames",
+  "version": "0.1.0",
+  "author": "Sasha Koss <kossnocorp@gmail.com>",
+  "description": "Front-end framework",
+
+  "devDependencies": {
+    "coffee-script": "",
+    "karma": "",
+    "mocha": "",
+    "karma-mocha": "",
+    "chai": "",
+    "karma-chai": "",
+    "sinon": "",
+    "sinon-chai": "",
+    "karma-sinon-chai": "",
+    "grunt": "",
+    "grunt-cli": "",
+    "grunt-karma": "",
+    "grunt-contrib-coffee": "",
+    "grunt-contrib-uglify": ""
+  },
+
+  "dependencies": {
+    "backbone": "",
+    "sugar": ""
+  },
+
+  "engine": {
+    "node": ">= 0.10"
+  },
+
+  "scripts": {
+    "test": "./node_modules/grunt-cli/bin/grunt karma:ci"
+  },
+
+  "license": "MIT"
+}
