@@ -1,9 +1,12 @@
-#= require_tree ./view_modules
+Framework = window.Framework or require('framework')
+PubSubModule = window.Framework.PubSubModule or require('framework/pub_sub_module')
+JQueryQueryModule = window.Framework.JQueryQueryModule or require('framework/jquery_query_module')
+Backbone = window.Backbone
 
 originConfigure = Backbone.View::_configure
 originRemove = Backbone.View::remove
 
-class Framework.View extends Backbone.View
+class View extends Backbone.View
 
   @addToConfigureChain: (fnName) ->
     @configureChain ?= []
@@ -13,8 +16,8 @@ class Framework.View extends Backbone.View
     @removeChain ?= []
     @removeChain.push(fnName)
 
-  @include Framework.PubSubModule
-  @include Framework.JQueryQuery
+  @include PubSubModule
+  @include JQueryQueryModule
 
   _configure: (options) ->
     configureChain = @constructor.configureChain
@@ -30,3 +33,4 @@ class Framework.View extends Backbone.View
 
     originRemove.call(@)
 
+Framework.export('framework/view', View)

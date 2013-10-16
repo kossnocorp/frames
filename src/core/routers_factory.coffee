@@ -1,4 +1,8 @@
-class Framework.RoutersFactory extends Framework.Class
+Framework = window.Framework or require('framework')
+Class = window.Framework?.Class or require('framework/class')
+Backbone = window.Backbone
+
+class RoutersFactory extends Class
 
   ROUTERS_SELECTOR = '[data-router]'
 
@@ -20,7 +24,7 @@ class Framework.RoutersFactory extends Framework.Class
   @detectRouter: ->
     routers = @routers()
     if routers.length > 1
-      @warn('There are more than one router, all except first will be ingnored.')
+      @warn('There are more than one router, all except first will be ignored.')
     routers[0]
 
   @routers: ->
@@ -28,4 +32,6 @@ class Framework.RoutersFactory extends Framework.Class
     $els = $root.find(ROUTERS_SELECTOR).add($root.filter(ROUTERS_SELECTOR))
     $els.map(-> $(@).data('router')).toArray()
 
-Framework.registerFactory(Framework.RoutersFactory, 'routers')
+Framework.registerFactory(RoutersFactory, 'routers')
+
+Framework.export('framework/routers_factory', RoutersFactory)

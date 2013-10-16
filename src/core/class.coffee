@@ -1,6 +1,8 @@
-#= require_tree ./class_modules
+Framework = window.Framework or require('framework')
+LoggerModule = window.Framework.LoggerModule or require('framework/logger_module')
+Backbone = window.Backbone
 
-class Framework.Class
+class Class
 
   @include: (module) ->
     Object.merge(@::, Object.reject(module, 'included', 'extended'))
@@ -46,6 +48,9 @@ class Framework.Class
     parts.push(name)
     parts.join('_').camelize(false)
 
-  @include Framework.LoggerModule
+  @include LoggerModule
 
-Framework.Class.patch(Backbone[klass]) for klass in 'View Model Collection Router'.split(' ')
+for klass in 'View Model Collection Router'.split(' ')
+  Class.patch(Backbone[klass])
+
+Framework.export('framework/class', Class)

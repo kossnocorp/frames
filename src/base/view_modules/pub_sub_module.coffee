@@ -1,11 +1,13 @@
-Framework.PubSubModule =
+Framework = window.Framework or require('framework')
+
+PubSubModule =
 
   included: (klass) ->
     @broker = new Noted.Broker()
     klass.addToConfigureChain('createEmitterAndReceiver')
 
   createEmitterAndReceiver: ->
-    @broker = Framework.PubSubModule.broker
+    @broker = PubSubModule.broker
     @emitter = new Noted.Emitter(@broker, @)
     @receiver = new Noted.Receiver(@broker, @)
 
@@ -17,3 +19,5 @@ Framework.PubSubModule =
 
   unsubscribe: (message, callback, context) ->
     @broker.unsubscribe(message, callback, @)
+
+Framework.export('framework/pub_sub_module', PubSubModule)

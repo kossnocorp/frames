@@ -1,4 +1,6 @@
-Framework.JQueryQuery =
+Framework = window.Framework or require('framework')
+
+JQueryQueryModule =
 
   included: (klass) ->
     klass.addToConfigureChain('buildQueryFunctions')
@@ -15,3 +17,5 @@ Framework.JQueryQuery =
           @[dropFnName] = -> @[privateName] = undefined
         else
           @[fnName] = -> @$(query)
+
+Framework.export('framework/jquery_query_module', JQueryQueryModule)
