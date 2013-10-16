@@ -1,3 +1,6 @@
+# Frames
+![](https://api.travis-ci.org/kossnocorp/frames.png)
+
 ## Installation
 
 1. Copy `src` content to `vendor/assets/javascripts/frames`,
