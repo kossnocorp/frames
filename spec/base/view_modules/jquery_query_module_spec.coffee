@@ -1,12 +1,12 @@
 View = require('framework/view')
-JQueryQuery = require('framework/jquery_query_module')
+JqueryQuery = require('framework/jquery_query_module')
 
-describe 'Framework.JQueryQuery', ->
+describe 'Framework.JqueryQuery', ->
 
   beforeEach ->
     class TestView extends View
       els: $user: '@user', $items: 'cached @item'
-    TestView.include(JQueryQuery)
+    TestView.include(JqueryQuery)
     @view = new TestView(el: document.body)
     @spy = sinon.stub(@view, '$', -> 42)
 

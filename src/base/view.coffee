@@ -1,6 +1,6 @@
 Framework = window.Framework or require('framework')
 PubSubModule = window.Framework.PubSubModule or require('framework/pub_sub_module')
-JQueryQueryModule = window.Framework.JQueryQueryModule or require('framework/jquery_query_module')
+JqueryQueryModule = window.Framework.JqueryQueryModule or require('framework/jquery_query_module')
 Backbone = window.Backbone
 
 originConfigure = Backbone.View::_configure
@@ -17,7 +17,7 @@ class View extends Backbone.View
     @removeChain.push(fnName)
 
   @include PubSubModule
-  @include JQueryQueryModule
+  @include JqueryQueryModule
 
   _configure: (options) ->
     configureChain = @constructor.configureChain
