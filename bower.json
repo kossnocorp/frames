@@ -12,8 +12,12 @@
   },
 
   "dependencies": {
+    "jquery": "",
+    "underscore": "",
     "backbone": "",
-    "sugar": ""
+    "sugar": "",
+    "echoes": "https://raw.github.com/kossnocorp/echoes/master/src/echo.coffee",
+    "noted": "https://raw.github.com/kossnocorp/noted/master/lib/noted.js"
   },
 
   "license": "MIT",

@@ -1,4 +1,7 @@
-class Framework.ViewsFactory extends Framework.Class
+Framework = window.Framework or require('framework')
+Class = window.Framework?.Class or require('framework/class')
+
+class ViewsFactory extends Class
 
   VIEWS_SELECTOR = '[data-view]'
   ROOT_SELECTOR = 'body'
@@ -63,4 +66,6 @@ class Framework.ViewsFactory extends Framework.Class
     else
       $els
 
-Framework.registerFactory(Framework.ViewsFactory, 'views')
+Framework.registerFactory(ViewsFactory, 'views')
+
+Framework.export('framework/views_factory', ViewsFactory)
