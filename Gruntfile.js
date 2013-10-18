@@ -26,6 +26,7 @@ module.exports = function (grunt) {
           'src/base/view_modules/pub_sub_module.coffee',
           'src/base/view_modules/jquery_query_module.coffee',
           'src/base/view.coffee',
+          'src/base/model.coffee',
 
           'spec/**/*_spec.coffee'
         ],
