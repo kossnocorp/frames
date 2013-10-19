@@ -17,10 +17,9 @@ module.exports = function (grunt) {
           'bower_components/noted/index.js',
 
           'src/core/framework.coffee',
-          'src/core/class_modules/logger_module.coffee',
+          'src/core/class_modules/*.coffee',
           'src/core/class.coffee',
-          'src/core/routers_factory.coffee',
-          'src/core/views_factory.coffee',
+          'src/core/*.coffee',
 
           'src/base/router.coffee',
           'src/base/view_modules/pub_sub_module.coffee',
