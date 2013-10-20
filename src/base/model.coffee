@@ -1,6 +1,6 @@
-Framework = window.Framework or require('framework')
+Frames = window.Frames or require('framework')
 Backbone = window.Backbone
 
 class Model extends Backbone.Model
 
-Framework.export('framework/model', Model)
+Frames.export('framework/model', Model)

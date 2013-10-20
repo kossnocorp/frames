@@ -1,4 +1,4 @@
-Framework = window.Framework or require('framework')
+Frames = window.Frames or require('framework')
 
 PubSubModule =
 
@@ -20,4 +20,4 @@ PubSubModule =
   unsubscribe: (message, callback, context) ->
     @broker.unsubscribe(message, callback, @)
 
-Framework.export('framework/pub_sub_module', PubSubModule)
+Frames.export('framework/pub_sub_module', PubSubModule)

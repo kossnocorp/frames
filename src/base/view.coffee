@@ -1,6 +1,6 @@
-Framework = window.Framework or require('framework')
-PubSubModule = window.Framework.PubSubModule or require('framework/pub_sub_module')
-JqueryQueryModule = window.Framework.JqueryQueryModule or require('framework/jquery_query_module')
+Frames = window.Frames or require('framework')
+PubSubModule = window.Frames.PubSubModule or require('framework/pub_sub_module')
+JqueryQueryModule = window.Frames.JqueryQueryModule or require('framework/jquery_query_module')
 Backbone = window.Backbone
 
 originConfigure = Backbone.View::_configure
@@ -33,4 +33,4 @@ class View extends Backbone.View
 
     originRemove.call(@)
 
-Framework.export('framework/view', View)
+Frames.export('framework/view', View)

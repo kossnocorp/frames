@@ -1,5 +1,5 @@
-Framework = window.Framework or require('framework')
-Class = window.Framework?.Class or require('framework/class')
+Frames = window.Frames or require('framework')
+Class = window.Frames?.Class or require('framework/class')
 Backbone = window.Backbone
 
 class RoutersFactory extends Class
@@ -32,6 +32,6 @@ class RoutersFactory extends Class
     $els = $root.find(ROUTERS_SELECTOR).add($root.filter(ROUTERS_SELECTOR))
     $els.map(-> $(@).data('router')).toArray()
 
-Framework.registerFactory(RoutersFactory, 'routers')
+Frames.registerFactory(RoutersFactory, 'routers')
 
-Framework.export('framework/routers_factory', RoutersFactory)
+Frames.export('framework/routers_factory', RoutersFactory)

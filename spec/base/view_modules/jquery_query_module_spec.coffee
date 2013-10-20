@@ -1,7 +1,7 @@
 View = require('framework/view')
 JqueryQuery = require('framework/jquery_query_module')
 
-describe 'Framework.JqueryQuery', ->
+describe 'Frames.JqueryQuery', ->
 
   beforeEach ->
     class TestView extends View

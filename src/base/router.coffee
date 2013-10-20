@@ -1,4 +1,4 @@
-Framework = window.Framework or require('framework')
+Frames = window.Frames or require('framework')
 Backbone = window.Backbone
 
 class Router extends Backbone.Router
@@ -8,7 +8,7 @@ class Router extends Backbone.Router
     Backbone.Router::_bindRoutes.call(@)
 
   createEmitterAndReceiver: ->
-    @broker = Framework.PubSubModule.broker
+    @broker = Frames.PubSubModule.broker
     @emitter = new Noted.Emitter(@broker, @)
     @receiver = new Noted.Receiver(@broker, @)
 
@@ -21,4 +21,4 @@ class Router extends Backbone.Router
   unsubscribe: (message, callback, context) ->
     @broker.unsubscribe(message, callback, @)
 
-Framework.export('framework/router', Router)
+Frames.export('framework/router', Router)

@@ -1,6 +1,6 @@
-Framework = require('framework')
+Frames = require('framework')
 
-describe 'Framework', ->
+describe 'Frames', ->
 
   describe 'factories functional', ->
 
@@ -10,39 +10,39 @@ describe 'Framework', ->
         @destroy: sinon.spy()
 
     beforeEach ->
-      Framework.factories = undefined
+      Frames.factories = undefined
       @FakeFactory = createFakeFactory()
 
     describe '@start', ->
 
       it 'runs create for every registred factory', ->
-        Framework.registerFactory(@FakeFactory)
-        Framework.start()
+        Frames.registerFactory(@FakeFactory)
+        Frames.start()
         expect(@FakeFactory.create).to.be.called
 
     describe '@stop', ->
 
       it 'calls destroy for every registred factory', ->
-        Framework.registerFactory(@FakeFactory)
-        Framework.stop()
+        Frames.registerFactory(@FakeFactory)
+        Frames.stop()
         expect(@FakeFactory.destroy).to.be.called
 
     describe '@registerFactory', ->
 
       it 'saves class to factories', ->
-        Framework.registerFactory(@FakeFactory)
-        expect(Object.values(Framework.factories)).to.be.eql [@FakeFactory]
+        Frames.registerFactory(@FakeFactory)
+        expect(Object.values(Frames.factories)).to.be.eql [@FakeFactory]
 
       it 'allows to register one factory per id', ->
         FakeFactoryA = createFakeFactory()
         FakeFactoryB = createFakeFactory()
-        Framework.registerFactory(@FakeFactory)
-        Framework.registerFactory(FakeFactoryA, 'w00t')
-        Framework.registerFactory(FakeFactoryB, 'w00t')
-        expect(Object.values(Framework.factories)).to.be.eql [@FakeFactory, FakeFactoryB]
+        Frames.registerFactory(@FakeFactory)
+        Frames.registerFactory(FakeFactoryA, 'w00t')
+        Frames.registerFactory(FakeFactoryB, 'w00t')
+        expect(Object.values(Frames.factories)).to.be.eql [@FakeFactory, FakeFactoryB]
 
       it 'returns factory id', ->
-        expect(Framework.registerFactory(@FakeFactory, 'w00t')).to.be.eq 'w00t'
+        expect(Frames.registerFactory(@FakeFactory, 'w00t')).to.be.eq 'w00t'
 
   describe '@export', ->
 
@@ -57,12 +57,12 @@ describe 'Framework', ->
         window.modula = @_modula
 
       it 'saves exports as name into window', ->
-        Framework.export('test_module', @TestModule)
+        Frames.export('test_module', @TestModule)
         expect(window.TestModule).to.be.eq @TestModule
         delete window.TestModule
 
       it 'uses slash as namespace devider', ->
-        Framework.export('test/module', @TestModule)
+        Frames.export('test/module', @TestModule)
         expect(Test.Module).to.be.eq @TestModule
         delete window.Test
 
@@ -70,6 +70,6 @@ describe 'Framework', ->
 
       it 'calls modula export', ->
         spy = sinon.spy(modula, 'export')
-        Framework.export('test_module', @TestModule)
+        Frames.export('test_module', @TestModule)
         expect(spy).to.be.calledWith('test_module', @TestModule)
         spy.restore()

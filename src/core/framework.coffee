@@ -1,4 +1,4 @@
-class Framework
+class Frames
 
   @start: ->
     return unless @factories
@@ -35,4 +35,4 @@ class Framework
   @__classify: (name) ->
     name.camelize()
 
-Framework.export('framework', Framework)
+Frames.export('framework', Frames)

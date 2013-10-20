@@ -8,16 +8,16 @@ All classes can be replaced with custom.
 
 Here is quick overview of classes situated in this directory:
 
-* **Framework**: base namespace. It used for registering and run
+* **Frames**: base namespace. It used for registering and run
   factories.
-* **Framework.Class**: base class for every class in Framework and application.
+* **Frames.Class**: base class for every class in Frames and application.
   Provides base class functions like include, extend, accessor etc.
-* **Framework.Base**: base class for every class in Framework
+* **Frames.Base**: base class for every class in Frames
   Provides functional for logging and communicating.
-* **Framework.BaseFactory**: base class for every factory class in Framework
-  (e.g. Framework.ViewFactory).
-* **Framework.RouterFactory**: default routers factory.
-* **Framework.ViewsFactory**: default views factory.
-* **Framework.Logger**: default applicatation logger.
-* **Framework.Starter**: default framework starter. Wraps Framework.start into
+* **Frames.BaseFactory**: base class for every factory class in Frames
+  (e.g. Frames.ViewFactory).
+* **Frames.RouterFactory**: default routers factory.
+* **Frames.ViewsFactory**: default views factory.
+* **Frames.Logger**: default applicatation logger.
+* **Frames.Starter**: default framework starter. Wraps Frames.start into
   try-catch and run it on DOM ready (depends on jQuery or Zepto.js).

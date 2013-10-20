@@ -1,5 +1,5 @@
-Framework = window.Framework or require('framework')
-LoggerModule = window.Framework.LoggerModule or require('framework/logger_module')
+Frames = window.Frames or require('framework')
+LoggerModule = window.Frames.LoggerModule or require('framework/logger_module')
 Backbone = window.Backbone
 
 class Class
@@ -53,4 +53,4 @@ class Class
 for klass in 'View Model Collection Router'.split(' ')
   Class.patch(Backbone[klass])
 
-Framework.export('framework/class', Class)
+Frames.export('framework/class', Class)

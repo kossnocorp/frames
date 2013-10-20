@@ -1,6 +1,6 @@
 Class = require('framework/class')
 
-describe 'Framework.LoggerModule', ->
+describe 'Frames.LoggerModule', ->
 
   LOG_FUNCTIONS = 'log debug info warn error'.split(' ')
 

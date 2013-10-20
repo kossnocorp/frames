@@ -1,6 +1,6 @@
 Router = require('framework/router')
 
-describe 'Framework.Router', ->
+describe 'Frames.Router', ->
 
   it 'inherits from Backbone.Router', ->
     Router::route.should.be.defined

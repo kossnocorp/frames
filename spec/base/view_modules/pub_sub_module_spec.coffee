@@ -1,6 +1,6 @@
 View = require('framework/view')
 
-describe 'Framework.PubSubModule', ->
+describe 'Frames.PubSubModule', ->
 
   beforeEach ->
     @viewA = new View()
