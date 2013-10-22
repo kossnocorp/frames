@@ -1,0 +1,3 @@
+# Frames glossary
+
+* [Behaviors](TODO)
