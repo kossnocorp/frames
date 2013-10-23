@@ -21,11 +21,8 @@ module.exports = function (grunt) {
           'src/core/class.coffee',
           'src/core/*.coffee',
 
-          'src/base/router.coffee',
-          'src/base/view_modules/pub_sub_module.coffee',
-          'src/base/view_modules/jquery_query_module.coffee',
-          'src/base/view.coffee',
-          'src/base/model.coffee',
+          'src/base/*_modules/*.coffee',
+          'src/base/*.coffee',
 
           'spec/**/*_spec.coffee'
         ],
