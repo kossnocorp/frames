@@ -1,6 +1,8 @@
 # Frames
 ![](https://api.travis-ci.org/kossnocorp/frames.png)
 
+Frames is a front-end framework based on Backbone.js philosophy
+
 ## Installation
 
 1. Copy `src` content to `vendor/assets/javascripts/frames`,
