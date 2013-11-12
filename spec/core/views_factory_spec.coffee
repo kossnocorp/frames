@@ -27,7 +27,6 @@ describe 'ViewsFactory', ->
       expect(Test2Component.Test2View).to.be.called
 
     it 'creates views for nodes', ->
-      debugger
       ViewsFactory.create(@$els)
       sharedExamples.call(@)
 

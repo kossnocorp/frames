@@ -26,7 +26,7 @@ describe 'View', ->
       it 'keep default Backbone.js behaviour', ->
         options = test: true
         view = new @Test(options)
-        view.options.should.be.eq options
+        expect(view.cid).to.be.defined
 
       it 'pass options to every function from configureChain', ->
         options = test: true

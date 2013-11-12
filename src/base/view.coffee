@@ -3,7 +3,6 @@ PubSubModule = window.Frames.PubSubModule or require('framework/pub_sub_module')
 JqueryQueryModule = window.Frames.JqueryQueryModule or require('framework/jquery_query_module')
 Backbone = window.Backbone
 
-originConfigure = Backbone.View::_configure
 originRemove = Backbone.View::remove
 
 class View extends Backbone.View
@@ -19,12 +18,12 @@ class View extends Backbone.View
   @include PubSubModule
   @include JqueryQueryModule
 
-  _configure: (options) ->
+  constructor: (options) ->
     configureChain = @constructor.configureChain
     if configureChain
       @[fnName].call(@, options) for fnName in configureChain
 
-    originConfigure.call(@, options)
+    super
 
   remove: ->
     removeChain = @constructor.removeChain
