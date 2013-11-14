@@ -1,5 +1,5 @@
 Frames = window.Frames or require('framework')
-LoggerModule = window.Frames.LoggerModule or require('framework/logger_module')
+LoggerModule = Frames.LoggerModule or require('framework/logger_module')
 Backbone = window.Backbone
 
 class Class
