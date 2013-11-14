@@ -33,7 +33,12 @@ module.exports = function (grunt) {
         autoWatch: true,
         browsers: ['PhantomJS'],
         captureTimeout: 60000,
-        singleRun: false
+        singleRun: false,
+        coffeePreprocessor: {
+          options: {
+            bare: false
+          }
+        }
       },
       dev: {
         reporters: ['dots']

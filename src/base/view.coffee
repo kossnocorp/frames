@@ -1,6 +1,6 @@
 Frames = window.Frames or require('framework')
-PubSubModule = window.Frames.PubSubModule or require('framework/pub_sub_module')
-JqueryQueryModule = window.Frames.JqueryQueryModule or require('framework/jquery_query_module')
+PubSubModule = Frames.PubSubModule or require('framework/pub_sub_module')
+JqueryQueryModule = Frames.JqueryQueryModule or require('framework/jquery_query_module')
 Backbone = window.Backbone
 
 originRemove = Backbone.View::remove

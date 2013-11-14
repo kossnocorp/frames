@@ -1,4 +1,4 @@
-Router = require('framework/model')
+Model = require('framework/model')
 
 describe 'Frames.Model', ->
 
