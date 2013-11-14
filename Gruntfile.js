@@ -20,6 +20,7 @@ module.exports = function (grunt) {
           'src/core/class_modules/*.coffee',
           'src/core/class.coffee',
           'src/core/*.coffee',
+          'src/core/*_src/*.coffee',
 
           'src/base/*_modules/*.coffee',
           'src/base/*.coffee',
