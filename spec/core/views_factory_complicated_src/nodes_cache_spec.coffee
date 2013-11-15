@@ -2,7 +2,7 @@ NodesCache = require('views_factory_complicated/nodes_cache')
 
 describe 'NodesCache', ->
 
-  describe 'Describe initial state of cache', ->
+  describe 'Initial state of cache', ->
 
     describe '.show', ->
       it 'returns empty hash by default', ->
