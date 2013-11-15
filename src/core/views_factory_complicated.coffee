@@ -6,6 +6,13 @@ Class = require('framework/class')
 
 class ViewsFactory extends Class
 
+  VIEW_SELECTOR = '[data-view]'
+  APP_SELECTOR = '[data-app]'
+
+  @options:
+    viewSelector: VIEW_SELECTOR
+    appSelector: APP_SELECTOR
+
   @create: ->
     true
 

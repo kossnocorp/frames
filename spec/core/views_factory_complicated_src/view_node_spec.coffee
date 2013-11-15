@@ -1,8 +1,27 @@
+ViewsFactory = require('views_factory_complicated')
 ViewNode = require('views_factory_complicated/view_node')
 
 describe 'ViewNode', ->
 
-  describe '.create', ->
+  beforeEach ->
+    ViewsFactory.options = {viewSelector: 'some_strange_selector'}
 
-    it 'returns true', ->
-      expect(ViewNode.create()).to.be.true
+    @$el = $('div')
+    @$secondEl = $('div')
+    @$thirdEl = $('div')
+
+    @viewNode = new ViewNode(@$el)
+    @secondViewNode = new ViewNode(@$secondEl)
+    @thirdViewNode = new ViewNode(@$thirdEl)
+
+  describe '.constructor', ->
+    it 'shares options from base ViewsFactory class', ->
+      expect(@viewNode.options).to.be.equal ViewsFactory.options
+
+    it 'has uniq id', ->
+      ids = [@viewNode.id, @secondViewNode.id, @thirdViewNode.id]
+      expect(ids.unique()).to.have.length 3
+
+    it 'has reference to provided jquery dom element', ->
+      expect(@viewNode.$el).to.be.equal @$el
+      expect(@viewNode.el).to.be.equal @$el[0]
