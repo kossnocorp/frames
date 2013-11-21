@@ -11,10 +11,13 @@ class TreeManager extends Class
     # TODO: add ability to set order for library sources
     # (I haven't find a way of doing this)
     @ViewNode = require('views_factory_complicated/view_node')
-    @ViewNode.onInit @addViewNodeIdToElData.bind(@)
+    @addViewNodeInitCallBack()
 
     @initialNodes = []
     @nodesCache = new NodesCache()
+
+  addViewNodeInitCallBack: ->
+    @ViewNode.onInit @addViewNodeIdToElData.bind(@)
 
   createTree: ->
     @setInitialNodes()
