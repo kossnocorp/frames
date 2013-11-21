@@ -14,7 +14,6 @@ class TreeManager extends Class
 
     @ViewNode.onInit @addViewNodeIdToElData.bind(@)
 
-
     @initNodes()
     @setParentsForInitialNodes()
     @setChildrenForInitialNodes()
@@ -41,10 +40,24 @@ class TreeManager extends Class
     @setChildrenForNodes(@initialNodes)
 
   @setParentsForNodes: (nodes) ->
+    for node in nodes
+      $parentEl = node.$el.parent().closest(@viewSelector())
+
+      # element has no parent if not found (i.e. it is root element)
+      if $parentEl.length is 0
+        NodesCache.addAsRoot(node)
+      else
+        # getting access to element viewNode through cache
+        nodeId = $parentEl.data('view-node-id')
+        node.parent = NodesCache.getById(nodeId)
+
 
   @setChildrenForNodes: (nodes) ->
 
   @activateNodes: ->
+
+  @viewSelector: ->
+    @_viewSelector ||= "#{@options.appSelector}, #{@options.viewSelector}"
 
   @addViewNodeIdToElData: (viewNode) ->
     viewNode.$el.data('view-node-id', viewNode.id)

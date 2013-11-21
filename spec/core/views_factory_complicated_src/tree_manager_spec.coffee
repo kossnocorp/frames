@@ -42,9 +42,6 @@ describe 'TreeManager', ->
     it 'sets reference to ViewNode constructor in @ViewNode', ->
       expect(TreeManager.ViewNode).to.match(/ViewNode/)
 
-    it 'adds init callback for viewNodes', ->
-
-
   describe 'Tree building behavior', ->
     beforeEach ->
       @$els = $render('nodes_with_data_view')
@@ -60,12 +57,8 @@ describe 'TreeManager', ->
         expect(TreeManager.ViewNode.callCount).to.be.eql(initViewNodesCallCount + 4)
 
       it 'has viewNodes pointed to corresponding dom elements in @initialNodes list', ->
-        viewSelector = TreeManager.options.viewSelector
-        appSelector  = TreeManager.options.appSelector
-
-        $layoutViews     = $('body').find(appSelector)
-        $views           = $('body').find(viewSelector)
-        expectedElsArray = $layoutViews.add($views).toArray()
+        $els = $('body').find(TreeManager.viewSelector())
+        expectedElsArray = $els.toArray()
 
         TreeManager.initNodes()
         initialNodesEls = TreeManager.initialNodes.map('el')
@@ -98,7 +91,7 @@ describe 'TreeManager', ->
         TreeManager.setChildrenForNodes.reset()
 
     describe '.setParentsForNodes', ->
-      it 'looks for closest view dom element and sets it as parent for provided viewNodes', ->
+      beforeEach ->
         TreeManager.initNodes()
         nodes = TreeManager.initialNodes
 
@@ -112,9 +105,20 @@ describe 'TreeManager', ->
         view2NodeId = $view2.data('view-node-id')
         view3NodeId = $view3.data('view-node-id')
 
-        appNode   = NodesCache.getById(appNodeId)
-        view1Node = NodesCache.getById(view1NodeId)
-        view2Node = NodesCache.getById(view2NodeId)
-        view3Node = NodesCache.getById(view3NodeId)
+        @appNode   = NodesCache.getById(appNodeId)
+        @view1Node = NodesCache.getById(view1NodeId)
+        @view2Node = NodesCache.getById(view2NodeId)
+        @view3Node = NodesCache.getById(view3NodeId)
 
         TreeManager.setParentsForNodes(nodes)
+
+      it 'looks for closest view dom element and sets it as parent for provided viewNodes', ->
+        expect(@view1Node.parent).to.be.equal @appNode
+        expect(@view2Node.parent).to.be.equal @appNode
+        expect(@view3Node.parent).to.be.equal @view2Node
+
+      it 'sets null reference to node parent if have no parent', ->
+        expect(@appNode.parent).to.be.null
+
+      it 'adds node to cache as root if have no parent', ->
+        expect(NodesCache.showRootNodes()).to.be.eql [@appNode]
