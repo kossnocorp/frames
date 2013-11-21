@@ -29,13 +29,6 @@ describe 'TreeManager', ->
   describe 'Constructor and tree building behavior', ->
     beforeEach ->
       @treeManager = new TreeManager
-      sinon.spy(@treeManager, 'setInitialNodes')
-      sinon.spy(@treeManager, 'setParentsForInitialNodes')
-      sinon.spy(@treeManager, 'setChildrenForInitialNodes')
-      sinon.spy(@treeManager, 'activateInitialNodes')
-      sinon.spy(@treeManager, 'setParentsForNodes')
-      sinon.spy(@treeManager, 'setChildrenForNodes')
-      sinon.spy(@treeManager, 'activateNodes')
 
     describe '.constructor', ->
       it 'shares options from base ViewsFactory class', ->
@@ -52,19 +45,24 @@ describe 'TreeManager', ->
         expect(@treeManager.initialNodes).to.be.eql []
 
     describe '.createTree', ->
-      beforeEach ->
-        @treeManager.createTree()
-
       it 'creates viewNodes for initial dom state', ->
+        sinon.spy(@treeManager, 'setInitialNodes')
+        @treeManager.createTree()
         expect(@treeManager.setInitialNodes).to.be.calledOnce
 
       it 'sets parents for initial viewNodes', ->
+        sinon.spy(@treeManager, 'setParentsForInitialNodes')
+        @treeManager.createTree()
         expect(@treeManager.setParentsForInitialNodes).to.be.calledOnce
 
       it 'sets children for initial viewNodes', ->
+        sinon.spy(@treeManager, 'setChildrenForInitialNodes')
+        @treeManager.createTree()
         expect(@treeManager.setChildrenForInitialNodes).to.be.calledOnce
 
       it 'activates initial viewNodes', ->
+        sinon.spy(@treeManager, 'activateInitialNodes')
+        @treeManager.createTree()
         expect(@treeManager.activateInitialNodes).to.be.calledOnce
 
 
@@ -96,6 +94,7 @@ describe 'TreeManager', ->
 
       describe '.setParentsForInitialNodes', ->
         it 'sets parents for initial nodes', ->
+          sinon.spy(@treeManager, 'setParentsForNodes')
           @treeManager.setInitialNodes()
           initialNodes = @treeManager.initialNodes
 
@@ -105,6 +104,7 @@ describe 'TreeManager', ->
 
       describe '.setChildrenForInitialNodes', ->
         it 'sets children for initial nodes', ->
+          sinon.spy(@treeManager, 'setChildrenForNodes')
           @treeManager.setInitialNodes()
           initialNodes = @treeManager.initialNodes
 
