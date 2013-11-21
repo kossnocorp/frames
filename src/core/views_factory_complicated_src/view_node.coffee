@@ -14,6 +14,9 @@ class ViewNode extends Class
     callbacksList = _onInitCallbacks
     callbacksList.push(callback)
 
+  @clearInitCallbacks: ->
+    _onInitCallbacks = []
+
   @onActivation: (callback) ->
     callbacksList = _onActivationCallbacks
     callbacksList.push(callback)

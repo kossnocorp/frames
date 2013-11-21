@@ -86,8 +86,16 @@ describe 'ViewNode', ->
       ViewNode.onInit(@secondCallback)
       ViewNode.onInit(@thirdCallback)
 
+    describe '#clearInitCallbacks', ->
+      it 'clears init callbacks list', ->
+        ViewNode.clearInitCallbacks()
+        expect(@viewNode.onInitCallbacks()).to.be.eql []
+
     describe '#onInit', ->
       it 'saves reference to provided callback inside @onInitCallbacks()', ->
+        ViewNode.onInit(@callback)
+        ViewNode.onInit(@secondCallback)
+        ViewNode.onInit(@thirdCallback)
         expect(@viewNode.onInitCallbacks()).to.be.eql [@callback, @secondCallback, @thirdCallback]
 
     describe '.init', ->
