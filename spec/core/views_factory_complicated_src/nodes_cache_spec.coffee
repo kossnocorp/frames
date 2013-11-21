@@ -2,82 +2,84 @@ NodesCache = require('views_factory_complicated/nodes_cache')
 
 describe 'NodesCache', ->
 
+  beforeEach ->
+    @nodesCache = new NodesCache
+
   describe 'Initial state of cache', ->
 
     describe '.show', ->
       it 'returns empty hash by default', ->
-        nodesHash = NodesCache.show()
+        nodesHash = @nodesCache.show()
         expect(nodesHash).to.be.an('object')
         expect(nodesHash).to.be.eql {}
 
     describe '.showRootNodes', ->
       it 'returns empty list by default', ->
-        rootNodesList = NodesCache.showRootNodes()
+        rootNodesList = @nodesCache.showRootNodes()
         expect(rootNodesList).to.be.an('array')
         expect(rootNodesList).to.be.eql []
 
   describe 'Cache management actions', ->
 
     beforeEach ->
-      NodesCache.clear()
       @node = id: 1, whatever: 'content'
       @secondNode = id: 2, whatever: 'more content'
 
     describe '.add', ->
       it 'adds node to nodes hash', ->
-        NodesCache.add(@node)
-        expect(NodesCache.show()).to.be.eql {1: @node}
+        @nodesCache.add(@node)
+        expect(@nodesCache.show()).to.be.eql {1: @node}
 
-        NodesCache.add(@secondNode)
-        expect(NodesCache.show()).to.be.eql {1: @node, 2: @secondNode}
+        @nodesCache.add(@secondNode)
+        expect(@nodesCache.show()).to.be.eql {1: @node, 2: @secondNode}
 
     describe '.addAsRoot', ->
       it 'adds node to root nodes list', ->
-        NodesCache.addAsRoot(@node)
-        expect(NodesCache.showRootNodes()).to.be.eql [@node]
+        @nodesCache.addAsRoot(@node)
+        expect(@nodesCache.showRootNodes()).to.be.eql [@node]
 
-        NodesCache.addAsRoot(@secondNode)
-        expect(NodesCache.showRootNodes()).to.be.eql [@node, @secondNode]
+        @nodesCache.addAsRoot(@secondNode)
+        expect(@nodesCache.showRootNodes()).to.be.eql [@node, @secondNode]
 
     describe '.getById', ->
       it "returns node by it's index", ->
-        NodesCache.add(@node)
+        @nodesCache.add(@node)
 
-        returnedNode = NodesCache.getById(@node.id)
+        returnedNode = @nodesCache.getById(@node.id)
         expect(returnedNode).to.be.equal @node
 
     describe '.removeById', ->
       it 'removes node from nodes hash by provided id', ->
-        NodesCache.add(@node)
-        NodesCache.add(@secondNode)
-        NodesCache.removeById(2)
+        @nodesCache.add(@node)
+        @nodesCache.add(@secondNode)
+        @nodesCache.removeById(2)
 
-        nodesHash = NodesCache.show()
+        nodesHash = @nodesCache.show()
         expect(nodesHash).to.be.eql {1: @node}
 
       it 'removes node from root nodes list by provided id', ->
-        NodesCache.addAsRoot(@node)
-        NodesCache.addAsRoot(@secondNode)
-        NodesCache.removeById(1)
+        @nodesCache.addAsRoot(@node)
+        @nodesCache.addAsRoot(@secondNode)
+        @nodesCache.removeById(1)
 
-        rootNodesList = NodesCache.showRootNodes()
+        rootNodesList = @nodesCache.showRootNodes()
         expect(rootNodesList).to.be.eql [@secondNode]
 
     describe '.clear', ->
       it 'clears nodes hash', ->
-        NodesCache.add(@node)
-        NodesCache.add(@secondNode)
-        NodesCache.clear()
+        @nodesCache.add(@node)
+        @nodesCache.add(@secondNode)
+        @nodesCache.clear()
 
-        nodesHash = NodesCache.show()
+        nodesHash = @nodesCache.show()
         expect(nodesHash).to.be.an('object')
         expect(nodesHash).to.be.eql {}
 
       it 'clears root nodes list', ->
-        NodesCache.addAsRoot(@node)
-        NodesCache.addAsRoot(@secondNode)
-        NodesCache.clear()
+        @nodesCache.addAsRoot(@node)
+        @nodesCache.addAsRoot(@secondNode)
+        @nodesCache.clear()
 
-        rootNodesList = NodesCache.showRootNodes()
+        rootNodesList = @nodesCache.showRootNodes()
         expect(rootNodesList).to.be.an('array')
         expect(rootNodesList).to.be.eql []

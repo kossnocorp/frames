@@ -42,13 +42,16 @@ describe 'TreeManager', ->
     it 'sets reference to ViewNode constructor in @ViewNode', ->
       expect(TreeManager.ViewNode).to.match(/ViewNode/)
 
+    it 'creates NodesCache instance in @nodesCache', ->
+      expect(TreeManager.nodesCache).to.be.instanceOf(NodesCache)
+
   describe 'Tree building behavior', ->
     beforeEach ->
       @$els = $render('nodes_with_data_view')
 
       $('body').empty()
       $('body').append(@$els)
-      NodesCache.clear()
+      TreeManager.nodesCache.clear()
 
     describe '.initNodes', ->
       it 'creates list of elements for specified "app" and "view" selectors and initializes viewNodes for them', ->
@@ -65,10 +68,10 @@ describe 'TreeManager', ->
         expect(initialNodesEls).to.be.eql expectedElsArray
 
       it 'saves viewNodes to NodesCache', ->
-        sinon.spy(NodesCache, 'add')
+        sinon.spy(TreeManager.nodesCache, 'add')
         TreeManager.initNodes()
-        expect(NodesCache.add.callCount).to.be.eql 4
-        NodesCache.add.reset()
+        expect(TreeManager.nodesCache.add.callCount).to.be.eql 4
+        TreeManager.nodesCache.add.reset()
 
     describe '.setParentsForInitialNodes', ->
       it 'sets parents for initial nodes', ->
@@ -105,10 +108,10 @@ describe 'TreeManager', ->
         view2NodeId = $view2.data('view-node-id')
         view3NodeId = $view3.data('view-node-id')
 
-        @appNode   = NodesCache.getById(appNodeId)
-        @view1Node = NodesCache.getById(view1NodeId)
-        @view2Node = NodesCache.getById(view2NodeId)
-        @view3Node = NodesCache.getById(view3NodeId)
+        @appNode   = TreeManager.nodesCache.getById(appNodeId)
+        @view1Node = TreeManager.nodesCache.getById(view1NodeId)
+        @view2Node = TreeManager.nodesCache.getById(view2NodeId)
+        @view3Node = TreeManager.nodesCache.getById(view3NodeId)
 
         TreeManager.setParentsForNodes(nodes)
 
@@ -121,4 +124,4 @@ describe 'TreeManager', ->
         expect(@appNode.parent).to.be.null
 
       it 'adds node to cache as root if have no parent', ->
-        expect(NodesCache.showRootNodes()).to.be.eql [@appNode]
+        expect(TreeManager.nodesCache.showRootNodes()).to.be.eql [@appNode]

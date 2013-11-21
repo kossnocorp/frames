@@ -11,8 +11,9 @@ class TreeManager extends Class
     # TODO: add ability to set order for library sources
     # (I haven't find a way of doing this)
     @ViewNode = require('views_factory_complicated/view_node')
-
     @ViewNode.onInit @addViewNodeIdToElData.bind(@)
+
+    @nodesCache = new NodesCache()
 
     @initNodes()
     @setParentsForInitialNodes()
@@ -29,7 +30,7 @@ class TreeManager extends Class
 
     for i in [0...$els.length]
       node = new @ViewNode($els.eq(i))
-      NodesCache.add(node)
+      @nodesCache.add(node)
 
       @initialNodes.push(node)
 
@@ -45,11 +46,11 @@ class TreeManager extends Class
 
       # element has no parent if not found (i.e. it is root element)
       if $parentEl.length is 0
-        NodesCache.addAsRoot(node)
+        @nodesCache.addAsRoot(node)
       else
         # getting access to element viewNode through cache
         nodeId = $parentEl.data('view-node-id')
-        node.parent = NodesCache.getById(nodeId)
+        node.parent = @nodesCache.getById(nodeId)
 
 
   @setChildrenForNodes: (nodes) ->

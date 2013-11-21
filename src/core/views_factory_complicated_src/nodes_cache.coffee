@@ -3,30 +3,29 @@ Class = require('framework/class')
 
 class NodesCache extends Class
 
-  nodes = {}
-  rootNodes = []
+  constructor: (@nodes = {}, @rootNodes = []) ->
 
-  @show: ->
-    nodes
+  show: ->
+    @nodes
 
-  @showRootNodes: ->
-    rootNodes
+  showRootNodes: ->
+    @rootNodes
 
-  @add: (node) ->
-    nodes[node.id] = node
+  add: (node) ->
+    @nodes[node.id] = node
 
-  @addAsRoot: (node) ->
-    rootNodes.push(node)
+  addAsRoot: (node) ->
+    @rootNodes.push(node)
 
-  @getById: (id) ->
-    nodes[id]
+  getById: (id) ->
+    @nodes[id]
 
-  @removeById: (id) ->
-    delete nodes[id]
-    rootNodes = _.reject(rootNodes, (node) -> node.id is id)
+  removeById: (id) ->
+    delete @nodes[id]
+    @rootNodes = _.reject(@rootNodes, (node) -> node.id is id)
 
-  @clear: ->
-    nodes = {}
-    rootNodes = []
+  clear: ->
+    @nodes = {}
+    @rootNodes = []
 
 Frames.export('views_factory_complicated/nodes_cache', NodesCache)
