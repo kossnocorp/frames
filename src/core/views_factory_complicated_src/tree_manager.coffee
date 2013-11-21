@@ -26,17 +26,13 @@ class TreeManager extends Class
     @activateInitialNodes()
 
   setInitialNodes: ->
-    $layouts = $(@options.appSelector)
-    $views = $(@options.viewSelector)
-    $els = $layouts.add($views)
+    $els = $(@viewSelector())
 
-    # contains links to all initial nodes
     @initialNodes = []
 
     for i in [0...$els.length]
       node = new @ViewNode($els.eq(i))
       @nodesCache.add(node)
-
       @initialNodes.push(node)
 
   setParentsForInitialNodes: ->
