@@ -5,22 +5,24 @@ NodesCache = require('views_factory_complicated/nodes_cache')
 
 class TreeManager extends Class
 
-  @options: ViewFactory.options
+  constructor: ->
+    @options = ViewFactory.options
 
-  @createTree: ->
     # TODO: add ability to set order for library sources
     # (I haven't find a way of doing this)
     @ViewNode = require('views_factory_complicated/view_node')
     @ViewNode.onInit @addViewNodeIdToElData.bind(@)
 
+    @initialNodes = []
     @nodesCache = new NodesCache()
 
-    @initNodes()
+  createTree: ->
+    @setInitialNodes()
     @setParentsForInitialNodes()
     @setChildrenForInitialNodes()
-    @activateNodes()
+    @activateInitialNodes()
 
-  @initNodes: ->
+  setInitialNodes: ->
     $layouts = $(@options.appSelector)
     $views = $(@options.viewSelector)
     $els = $layouts.add($views)
@@ -34,13 +36,13 @@ class TreeManager extends Class
 
       @initialNodes.push(node)
 
-  @setParentsForInitialNodes: ->
+  setParentsForInitialNodes: ->
     @setParentsForNodes(@initialNodes)
 
-  @setChildrenForInitialNodes: ->
+  setChildrenForInitialNodes: ->
     @setChildrenForNodes(@initialNodes)
 
-  @setParentsForNodes: (nodes) ->
+  setParentsForNodes: (nodes) ->
     for node in nodes
       $parentEl = node.$el.parent().closest(@viewSelector())
 
@@ -52,15 +54,17 @@ class TreeManager extends Class
         nodeId = $parentEl.data('view-node-id')
         node.parent = @nodesCache.getById(nodeId)
 
+  setChildrenForNodes: (nodes) ->
 
-  @setChildrenForNodes: (nodes) ->
+  activateInitialNodes: ->
+    @activateNodes(@initialNodes)
 
-  @activateNodes: ->
+  activateNodes: (nodes) ->
 
-  @viewSelector: ->
+  viewSelector: ->
     @_viewSelector ||= "#{@options.appSelector}, #{@options.viewSelector}"
 
-  @addViewNodeIdToElData: (viewNode) ->
+  addViewNodeIdToElData: (viewNode) ->
     viewNode.$el.data('view-node-id', viewNode.id)
 
 Frames.export('views_factory_complicated/tree_manager', TreeManager)

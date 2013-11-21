@@ -7,43 +7,47 @@ describe 'TreeManager', ->
   $render = (name) ->
     $(window.__html__["spec/fixtures/complicated_views/#{name}.html"])
 
-  it 'shares options from base ViewsFactory class in @options()', ->
-    expect(TreeManager.options).to.be.equal ViewsFactory.options
+  beforeEach ->
+    @treeManager = new TreeManager
+    sinon.spy(@treeManager, 'setInitialNodes')
+    sinon.spy(@treeManager, 'setParentsForInitialNodes')
+    sinon.spy(@treeManager, 'setChildrenForInitialNodes')
+    sinon.spy(@treeManager, 'activateInitialNodes')
+    sinon.spy(@treeManager, 'setParentsForNodes')
+    sinon.spy(@treeManager, 'setChildrenForNodes')
+    sinon.spy(@treeManager, 'activateNodes')
 
-  before ->
-    sinon.spy(TreeManager, 'initNodes')
-    sinon.spy(TreeManager, 'setParentsForInitialNodes')
-    sinon.spy(TreeManager, 'setChildrenForInitialNodes')
-    sinon.spy(TreeManager, 'activateNodes')
-    sinon.spy(TreeManager, 'addViewNodeIdToElData')
-
-    TreeManager.createTree()
-    sinon.spy(TreeManager, 'ViewNode')
-    TreeManager.ViewNode.reset()
-
-  describe '.createTree', ->
-
-    it 'creates viewNodes for initial dom state', ->
-      expect(TreeManager.initNodes).to.be.calledOnce
-      expect(TreeManager.initNodes.lastCall.args).to.be.empty
-
-    it 'sets parents for initial viewNodes', ->
-      expect(TreeManager.setParentsForInitialNodes).to.be.calledOnce
-      expect(TreeManager.setParentsForInitialNodes.lastCall.args).to.be.empty
-
-    it 'sets children for initial viewNodes', ->
-      expect(TreeManager.setChildrenForInitialNodes).to.be.calledOnce
-      expect(TreeManager.setChildrenForInitialNodes.lastCall.args).to.be.empty
-
-    it 'activates initial viewNodes', ->
-      expect(TreeManager.activateNodes).to.be.calledOnce
-      expect(TreeManager.activateNodes.lastCall.args).to.be.empty
+  describe '.constructor', ->
+    it 'shares options from base ViewsFactory class', ->
+      expect(@treeManager.options).to.be.equal ViewsFactory.options
 
     it 'sets reference to ViewNode constructor in @ViewNode', ->
-      expect(TreeManager.ViewNode).to.match(/ViewNode/)
+      expect(@treeManager.ViewNode).to.match(/ViewNode/)
 
     it 'creates NodesCache instance in @nodesCache', ->
-      expect(TreeManager.nodesCache).to.be.instanceOf(NodesCache)
+      expect(@treeManager.nodesCache).to.be.instanceOf(NodesCache)
+
+    it 'has empty @initialNodes list', ->
+      expect(@treeManager.initialNodes).to.be.an('array')
+      expect(@treeManager.initialNodes).to.be.eql []
+
+  describe '.createTree', ->
+    beforeEach ->
+      @treeManager.createTree()
+      @initialNodes = @treeManager.initialNodes
+
+    it 'creates viewNodes for initial dom state', ->
+      expect(@treeManager.setInitialNodes).to.be.calledOnce
+
+    it 'sets parents for initial viewNodes', ->
+      expect(@treeManager.setParentsForInitialNodes).to.be.calledOnce
+
+    it 'sets children for initial viewNodes', ->
+      expect(@treeManager.setChildrenForInitialNodes).to.be.calledOnce
+
+    it 'activates initial viewNodes', ->
+      expect(@treeManager.activateInitialNodes).to.be.calledOnce
+
 
   describe 'Tree building behavior', ->
     beforeEach ->
@@ -51,69 +55,65 @@ describe 'TreeManager', ->
 
       $('body').empty()
       $('body').append(@$els)
-      TreeManager.nodesCache.clear()
 
-    describe '.initNodes', ->
+    describe '.setInitialNodes', ->
       it 'creates list of elements for specified "app" and "view" selectors and initializes viewNodes for them', ->
-        initViewNodesCallCount = TreeManager.ViewNode.callCount
-        TreeManager.initNodes()
-        expect(TreeManager.ViewNode.callCount).to.be.eql(initViewNodesCallCount + 4)
+        sinon.spy(@treeManager, 'ViewNode')
+        @treeManager.setInitialNodes()
+        expect(@treeManager.ViewNode.callCount).to.be.eql 4
 
       it 'has viewNodes pointed to corresponding dom elements in @initialNodes list', ->
-        $els = $('body').find(TreeManager.viewSelector())
+        $els = $('body').find(@treeManager.viewSelector())
         expectedElsArray = $els.toArray()
 
-        TreeManager.initNodes()
-        initialNodesEls = TreeManager.initialNodes.map('el')
+        @treeManager.setInitialNodes()
+        initialNodesEls = @treeManager.initialNodes.map('el')
         expect(initialNodesEls).to.be.eql expectedElsArray
 
       it 'saves viewNodes to NodesCache', ->
-        sinon.spy(TreeManager.nodesCache, 'add')
-        TreeManager.initNodes()
-        expect(TreeManager.nodesCache.add.callCount).to.be.eql 4
-        TreeManager.nodesCache.add.reset()
+        sinon.spy(@treeManager.nodesCache, 'add')
+        @treeManager.setInitialNodes()
+        expect(@treeManager.nodesCache.add.callCount).to.be.eql 4
 
     describe '.setParentsForInitialNodes', ->
       it 'sets parents for initial nodes', ->
-        initialNodes = TreeManager.initialNodes
+        @treeManager.setInitialNodes()
+        initialNodes = @treeManager.initialNodes
 
-        sinon.spy(TreeManager, 'setParentsForNodes')
-        TreeManager.setParentsForInitialNodes()
-        expect(TreeManager.setParentsForNodes).to.be.calledOnce
-        expect(TreeManager.setParentsForNodes.lastCall.args[0]).to.be.equal initialNodes
-        TreeManager.setParentsForNodes.reset()
+        @treeManager.setParentsForInitialNodes()
+        expect(@treeManager.setParentsForNodes).to.be.calledOnce
+        expect(@treeManager.setParentsForNodes.lastCall.args[0]).to.be.equal initialNodes
 
     describe '.setChildrenForInitialNodes', ->
       it 'sets children for initial nodes', ->
-        initialNodes = TreeManager.initialNodes
+        @treeManager.setInitialNodes()
+        initialNodes = @treeManager.initialNodes
 
-        sinon.spy(TreeManager, 'setChildrenForNodes')
-        TreeManager.setChildrenForInitialNodes()
-        expect(TreeManager.setChildrenForNodes).to.be.calledOnce
-        expect(TreeManager.setChildrenForNodes.lastCall.args[0]).to.be.equal initialNodes
-        TreeManager.setChildrenForNodes.reset()
+        @treeManager.setChildrenForInitialNodes()
+        expect(@treeManager.setChildrenForNodes).to.be.calledOnce
+        expect(@treeManager.setChildrenForNodes.lastCall.args[0]).to.be.equal initialNodes
 
     describe '.setParentsForNodes', ->
       beforeEach ->
-        TreeManager.initNodes()
-        nodes = TreeManager.initialNodes
+        @treeManager.setInitialNodes()
+        nodes = @treeManager.initialNodes
 
         $app = $('#app1')
         $view1 = $('#view1')
         $view2 = $('#view2')
         $view3 = $('#view3')
 
-        appNodeId   = $app.data('view-node-id')
+        appNodeId = $app.data('view-node-id')
         view1NodeId = $view1.data('view-node-id')
         view2NodeId = $view2.data('view-node-id')
         view3NodeId = $view3.data('view-node-id')
 
-        @appNode   = TreeManager.nodesCache.getById(appNodeId)
-        @view1Node = TreeManager.nodesCache.getById(view1NodeId)
-        @view2Node = TreeManager.nodesCache.getById(view2NodeId)
-        @view3Node = TreeManager.nodesCache.getById(view3NodeId)
+        @appNode   = @treeManager.nodesCache.getById(appNodeId)
+        @view1Node = @treeManager.nodesCache.getById(view1NodeId)
+        @view2Node = @treeManager.nodesCache.getById(view2NodeId)
+        @view3Node = @treeManager.nodesCache.getById(view3NodeId)
 
-        TreeManager.setParentsForNodes(nodes)
+        @treeManager.setParentsForNodes(nodes)
 
       it 'looks for closest view dom element and sets it as parent for provided viewNodes', ->
         expect(@view1Node.parent).to.be.equal @appNode
@@ -124,4 +124,4 @@ describe 'TreeManager', ->
         expect(@appNode.parent).to.be.null
 
       it 'adds node to cache as root if have no parent', ->
-        expect(TreeManager.nodesCache.showRootNodes()).to.be.eql [@appNode]
+        expect(@treeManager.nodesCache.showRootNodes()).to.be.eql [@appNode]
