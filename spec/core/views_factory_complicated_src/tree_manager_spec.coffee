@@ -34,7 +34,6 @@ describe 'TreeManager', ->
   describe '.createTree', ->
     beforeEach ->
       @treeManager.createTree()
-      @initialNodes = @treeManager.initialNodes
 
     it 'creates viewNodes for initial dom state', ->
       expect(@treeManager.setInitialNodes).to.be.calledOnce
