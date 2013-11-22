@@ -102,6 +102,28 @@ class TreeManager extends Class
       childNode.remove()
       @nodesCache.removeById(childNode.id)
 
+  refresh: (refreshedNode) ->
+    $els = refreshedNode.$el.find(@viewSelector())
+    newNodes = [refreshedNode]
+
+    for i in [0...$els.length]
+      $el = $els.eq(i)
+
+      # if el has link to viewNode then viewNode is initialized
+      if nodeId = $el.data('view-node-id')
+        node = @nodesCache.getById(nodeId)
+
+      # else we need to initialize new viewNode
+      else
+        node = new @ViewNode($els.eq(i), @viewHooks)
+        @nodesCache.add(node)
+
+      newNodes.push(node)
+
+    @setParentsForNodes(newNodes)
+    @setChildrenForNodes(newNodes)
+    @activateNode(refreshedNode)
+
   viewSelector: ->
     @_viewSelector ||= "#{@options.appSelector}, #{@options.viewSelector}"
 

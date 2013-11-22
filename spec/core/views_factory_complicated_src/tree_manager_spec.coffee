@@ -284,3 +284,73 @@ describe 'TreeManager', ->
             expect(@treeManager.nodesCache.getById(@view1Node.id)).to.be.undefined
             expect(@treeManager.nodesCache.getById(@view2Node.id)).to.be.undefined
             expect(@treeManager.nodesCache.getById(@view3Node.id)).to.be.undefined
+
+      describe 'ViewNode refreshing behavior', ->
+        beforeEach ->
+          @treeManager.createTree()
+          @$app = $('#app1')
+          $view1 = $('#view1')
+          $view2 = $('#view2')
+          $view3 = $('#view3')
+
+          @$newEls = $render('nodes_for_refresh')
+
+          appNodeId = @$app.data('view-node-id')
+          view1NodeId = $view1.data('view-node-id')
+          view2NodeId = $view2.data('view-node-id')
+          view3NodeId = $view3.data('view-node-id')
+
+          @appNode   = @treeManager.nodesCache.getById(appNodeId)
+          @view1Node = @treeManager.nodesCache.getById(view1NodeId)
+          @view2Node = @treeManager.nodesCache.getById(view2NodeId)
+          @view3Node = @treeManager.nodesCache.getById(view3NodeId)
+
+        describe '.refresh', ->
+          beforeEach ->
+            @$app.append(@$newEls)
+            @newNodesList = []
+            @treeManager.refresh(@appNode)
+
+            for el in 'app2 view4 view5 view6 view7 view8 view9'.split(' ')
+              id = $('#' + el).data('view-node-id')
+              @[el + 'Node'] = @treeManager.nodesCache.getById(id)
+              @newNodesList.push(@[el + 'Node'])
+
+          it 'has viewNodes initialized for new view elements', ->
+            $els = @$newEls.wrap('<div />').parent().find(@treeManager.viewSelector())
+            expectedElsArray = $els.toArray()
+            newElsArray = expectedElsArray.map((el) =>
+              id = $(el).data('view-node-id')
+              @treeManager.nodesCache.getById(id).el
+            )
+
+            expect(newElsArray).to.be.eql expectedElsArray
+
+          it 'sets correct parents for new viewNodes', ->
+            expect(@view1Node.parent).to.be.equal @appNode
+            expect(@view2Node.parent).to.be.equal @appNode
+            expect(@view3Node.parent).to.be.equal @view2Node
+            expect(@view4Node.parent).to.be.equal @appNode
+            expect(@view5Node.parent).to.be.equal @view4Node
+            expect(@view6Node.parent).to.be.equal @view5Node
+            expect(@view7Node.parent).to.be.equal @view4Node
+            expect(@app2Node.parent).to.be.equal @view4Node
+            expect(@view8Node.parent).to.be.equal @app2Node
+            expect(@view9Node.parent).to.be.equal @app2Node
+
+          it 'sets correct children for new viewNodes', ->
+            expect(@appNode.children).to.be.eql [@view1Node, @view2Node, @view4Node]
+            expect(@view1Node.children).to.be.eql []
+            expect(@view2Node.children).to.be.eql [@view3Node]
+            expect(@view3Node.children).to.be.eql []
+            expect(@view4Node.children).to.be.eql [@view5Node, @view7Node, @app2Node]
+            expect(@view5Node.children).to.be.eql [@view6Node]
+            expect(@view6Node.children).to.be.eql []
+            expect(@view7Node.children).to.be.eql []
+            expect(@app2Node.children).to.be.eql [@view8Node, @view9Node]
+            expect(@view8Node.children).to.be.eql []
+            expect(@view9Node.children).to.be.eql []
+
+          it 'activates new viewNodes', ->
+            for node in @newNodesList
+              expect(node.isActivated()).to.be.true
