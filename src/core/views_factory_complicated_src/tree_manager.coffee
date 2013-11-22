@@ -20,6 +20,7 @@ class TreeManager extends Class
     ViewHooks = require('views_factory_complicated/view_hooks')
     @viewHooks = new ViewHooks
     @viewHooks.onInit @addViewNodeIdToElData.bind(@)
+    @viewHooks.onInit @addRemoveEventHandlerToEl.bind(@)
 
   createTree: ->
     @setInitialNodes()
@@ -81,10 +82,33 @@ class TreeManager extends Class
     for childNode in node.children
       @activateNode(childNode)
 
+  removeNode: (node) ->
+    return if node.isRemoved()
+
+    if node.parent
+      node.parent.removeChild(node)
+
+    @removeChildNodes(node)
+    node.remove()
+    @nodesCache.removeById(node.id)
+
+  removeChildNodes: (node) ->
+    # we cloning children array, because it has dynamic length
+    # and we need to iterate through every element
+    tempChildren = _.clone(node.children)
+
+    for childNode in tempChildren
+      @removeChildNodes(childNode)
+      childNode.remove()
+      @nodesCache.removeById(childNode.id)
+
   viewSelector: ->
     @_viewSelector ||= "#{@options.appSelector}, #{@options.viewSelector}"
 
   addViewNodeIdToElData: (viewNode) ->
     viewNode.$el.data('view-node-id', viewNode.id)
+
+  addRemoveEventHandlerToEl: (viewNode) ->
+    viewNode.$el.on('remove', => @removeNode(viewNode))
 
 Frames.export('views_factory_complicated/tree_manager', TreeManager)

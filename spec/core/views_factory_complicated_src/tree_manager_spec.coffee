@@ -25,8 +25,9 @@ describe 'TreeManager', ->
       it 'adds @addViewNodeIdToElData init hook', ->
         sinon.spy(ViewHooks::, 'onInit')
         initialOnInitCallsCount = @treeManager.viewHooks.onInit.callCount
+        hooksCount = 2 # we expect 2 hooks to be triggered on init
         @treeManager = new TreeManager
-        expect(@treeManager.viewHooks.onInit.callCount).to.be.eql(initialOnInitCallsCount + 1)
+        expect(@treeManager.viewHooks.onInit.callCount).to.be.eql(initialOnInitCallsCount + hooksCount)
 
     describe '.addViewNodeIdToElData', ->
       it "adds viewNodeId to node's $element", ->
@@ -212,3 +213,74 @@ describe 'TreeManager', ->
             @treeManager.setChildrenForNodes(@nodes)
             @treeManager.activateRootNodes(@nodes)
             expect(@appNode.isActivated()).to.be.true
+
+        describe '.removeNode', ->
+          beforeEach ->
+            @treeManager.setParentsForNodes(@nodes)
+            @treeManager.setChildrenForNodes(@nodes)
+
+          it 'does nothing if viewNode is already removed', ->
+            sinon.spy(@view3Node, 'remove')
+            removeCallsCount = @view3Node.remove.callCount
+
+            @view3Node.remove()
+            @treeManager.removeNode(@view3Node)
+            expect(@view3Node.remove.callCount).to.be.eql(removeCallsCount + 1)
+
+          it "deattaches node from it's parent", ->
+            parent = @view3Node.parent
+            expect(parent.children.indexOf(@view3Node) > -1).to.be.true
+
+            @treeManager.removeNode(@view3Node)
+            expect(parent.children.indexOf(@view3Node) > -1).to.be.false
+
+          it 'removes provided node', ->
+            @treeManager.removeNode(@view3Node)
+            expect(@view3Node.isRemoved()).to.be.true
+
+          it 'removes child nodes', ->
+            sinon.spy(@treeManager, 'removeChildNodes')
+            @treeManager.removeNode(@appNode)
+
+            expect(@treeManager.removeChildNodes).to.be.called
+            expect(@treeManager.removeChildNodes.firstCall.args[0]).to.be.eql @appNode
+
+          it 'at first removes child nodes', ->
+            sinon.spy(@appNode, 'remove')
+            sinon.spy(@view1Node, 'remove')
+
+            @treeManager.removeNode(@appNode)
+            expect(@view1Node.remove).to.be.calledBefore(@appNode.remove)
+
+          it 'removes node from nodesCache', ->
+            nodeId = @appNode.id
+            expect(@treeManager.nodesCache.getById(nodeId)).to.be.equal @appNode
+
+            @treeManager.removeNode(@appNode)
+            expect(@treeManager.nodesCache.getById(nodeId)).to.be.undefined
+
+        describe '.removeChildNodes', ->
+          beforeEach ->
+            @treeManager.setParentsForNodes(@nodes)
+            @treeManager.setChildrenForNodes(@nodes)
+
+            sinon.spy(@appNode, 'remove')
+            sinon.spy(@view1Node, 'remove')
+            sinon.spy(@view2Node, 'remove')
+            sinon.spy(@view3Node, 'remove')
+
+            @treeManager.removeChildNodes(@appNode)
+
+          it "recursively removes provided viewNode's children", ->
+            expect(@view1Node.remove).to.be.calledOnce
+            expect(@view2Node.remove).to.be.calledOnce
+            expect(@view3Node.remove).to.be.calledOnce
+
+          it 'removes children viewNodes in proper order', ->
+            expect(@view1Node.remove).to.be.calledBefore(@view2Node.remove)
+            expect(@view3Node.remove).to.be.calledBefore(@view2Node.remove)
+
+          it 'removes children viewNodes from nodes cache', ->
+            expect(@treeManager.nodesCache.getById(@view1Node.id)).to.be.undefined
+            expect(@treeManager.nodesCache.getById(@view2Node.id)).to.be.undefined
+            expect(@treeManager.nodesCache.getById(@view3Node.id)).to.be.undefined
