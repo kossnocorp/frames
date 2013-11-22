@@ -259,7 +259,6 @@ describe 'TreeManager', ->
             @treeManager.removeNode(@appNode)
             expect(@treeManager.nodesCache.getById(nodeId)).to.be.undefined
 
-
           describe 'OnRemove event handling behavior', ->
             it 'being called whenever dom element with viewNode being removed from DOM', ->
               sinon.spy(@treeManager, 'removeNode')
