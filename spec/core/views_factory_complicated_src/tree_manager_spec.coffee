@@ -124,13 +124,12 @@ describe 'TreeManager', ->
           initialNodes = @treeManager.initialNodes
 
           @treeManager.setChildrenForInitialNodes()
-          expect(@treeManager.setChildrenForNodes).to.be.calledOnce
-          expect(@treeManager.setChildrenForNodes.lastCall.args[0]).to.be.equal initialNodes
+          expect(@treeManager.setChildrenForNodes.firstCall.args[0]).to.be.equal initialNodes
 
-      describe '.setParentsForNodes', ->
+      describe 'Tree setup and activation', ->
         beforeEach ->
           @treeManager.setInitialNodes()
-          nodes = @treeManager.initialNodes
+          @nodes = @treeManager.initialNodes
 
           $app = $('#app1')
           $view1 = $('#view1')
@@ -147,15 +146,69 @@ describe 'TreeManager', ->
           @view2Node = @treeManager.nodesCache.getById(view2NodeId)
           @view3Node = @treeManager.nodesCache.getById(view3NodeId)
 
-          @treeManager.setParentsForNodes(nodes)
+        describe '.setParentsForNodes', ->
+          beforeEach ->
+            @treeManager.setParentsForNodes(@nodes)
 
-        it 'looks for closest view dom element and sets it as parent for provided viewNodes', ->
-          expect(@view1Node.parent).to.be.equal @appNode
-          expect(@view2Node.parent).to.be.equal @appNode
-          expect(@view3Node.parent).to.be.equal @view2Node
+          it 'looks for closest view dom element and sets it as parent for provided viewNodes', ->
+            expect(@view1Node.parent).to.be.equal @appNode
+            expect(@view2Node.parent).to.be.equal @appNode
+            expect(@view3Node.parent).to.be.equal @view2Node
 
-        it 'sets null reference to node parent if have no parent', ->
-          expect(@appNode.parent).to.be.null
+          it 'sets null reference to node parent if have no parent', ->
+            expect(@appNode.parent).to.be.null
 
-        it 'adds node to cache as root if have no parent', ->
-          expect(@treeManager.nodesCache.showRootNodes()).to.be.eql [@appNode]
+          it 'adds node to cache as root if have no parent', ->
+            expect(@treeManager.nodesCache.showRootNodes()).to.be.eql [@appNode]
+
+        describe '.setChildrenForNodes', ->
+          beforeEach ->
+            @treeManager.setParentsForNodes(@nodes)
+            @treeManager.setChildrenForNodes(@nodes)
+
+          it 'sets children for provided nodes', ->
+            expect(@appNode.children).to.be.eql [@view1Node, @view2Node]
+            expect(@view1Node.children).to.be.eql []
+            expect(@view2Node.children).to.be.eql [@view3Node]
+            expect(@view3Node.children).to.be.eql []
+
+        describe '.activateNode', ->
+          beforeEach ->
+            sinon.spy(@appNode, 'activate')
+            sinon.spy(@view1Node, 'activate')
+            sinon.spy(@view2Node, 'activate')
+            sinon.spy(@view3Node, 'activate')
+
+            @treeManager.setParentsForNodes(@nodes)
+            @treeManager.setChildrenForNodes(@nodes)
+            @treeManager.activateNode(@appNode)
+
+          it "recursively activates provided node and it's children nodes", ->
+            expect(@appNode.isActivated()).to.be.true
+            expect(@view1Node.isActivated()).to.be.true
+            expect(@view2Node.isActivated()).to.be.true
+            expect(@view3Node.isActivated()).to.be.true
+
+          it 'activates nodes in proper order', ->
+            expect(@appNode.activate).to.be.calledBefore(@view1Node.activate)
+            expect(@view1Node.activate).to.be.calledBefore(@view2Node.activate)
+            expect(@view2Node.activate).to.be.calledBefore(@view3Node.activate)
+
+        describe '.activateInitialNodes', ->
+          it 'activates root view nodes in initial viewNodes list', ->
+            sinon.spy(@treeManager, 'activateRootNodes')
+            initialNodes = @treeManager.initialNodes
+
+            @treeManager.setParentsForNodes(@nodes)
+            @treeManager.setChildrenForNodes(@nodes)
+            @treeManager.activateInitialNodes(@nodes)
+
+            expect(@treeManager.activateRootNodes).to.be.calledOnce
+            expect(@treeManager.activateRootNodes.lastCall.args[0]).to.be.equal initialNodes
+
+        describe '.activateRootNodes', ->
+          it 'searches for root viewNodes in provided viewNodes list and activates them', ->
+            @treeManager.setParentsForNodes(@nodes)
+            @treeManager.setChildrenForNodes(@nodes)
+            @treeManager.activateRootNodes(@nodes)
+            expect(@appNode.isActivated()).to.be.true

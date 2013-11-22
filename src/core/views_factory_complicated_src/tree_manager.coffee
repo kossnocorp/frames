@@ -56,11 +56,30 @@ class TreeManager extends Class
         node.parent = @nodesCache.getById(nodeId)
 
   setChildrenForNodes: (nodes) ->
+    return unless nodes.length
+
+    node = nodes.shift()
+
+    # setting child nodes for first node in list
+    node.setChildren(nodes)
+
+    # setting child nodes for remaining nodes
+    @setChildrenForNodes(nodes)
 
   activateInitialNodes: ->
-    @activateNodes(@initialNodes)
+    @activateRootNodes(@initialNodes)
 
-  activateNodes: (nodes) ->
+  activateRootNodes: (nodes) ->
+    rootNodes = @nodesCache.showRootNodes()
+
+    for node in rootNodes
+      @activateNode(node)
+
+  activateNode: (node) ->
+    node.activate()
+
+    for childNode in node.children
+      @activateNode(childNode)
 
   viewSelector: ->
     @_viewSelector ||= "#{@options.appSelector}, #{@options.viewSelector}"
