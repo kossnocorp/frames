@@ -1,35 +1,17 @@
 Frames = require('framework')
 Class = require('framework/class')
 ViewFactory = require('views_factory_complicated')
+ViewHooks = require('views_factory_complicated/view_hooks')
 
 class ViewNode extends Class
 
-  _onInitCallbacks = []
-  _onActivationCallbacks = []
-  _onUnloadCallbacks = []
-
   viewNodeId = 1
 
-  @onInit: (callback) ->
-    callbacksList = _onInitCallbacks
-    callbacksList.push(callback)
-
-  @clearInitCallbacks: ->
-    _onInitCallbacks = []
-
-  @onActivation: (callback) ->
-    callbacksList = _onActivationCallbacks
-    callbacksList.push(callback)
-
-  @onUnload: (callback) ->
-    callbacksList = _onUnloadCallbacks
-    callbacksList.push(callback)
-
-  constructor: ($el) ->
+  constructor: (@$el, viewHooks) ->
     @options = ViewFactory.options
+    @viewHooks = viewHooks || new ViewHooks()
 
-    @$el = $el
-    @el = $el[0]
+    @el = @$el[0]
     @id = "viewNodeId#{viewNodeId}"
     @parent = null
     @children = []
@@ -51,13 +33,13 @@ class ViewNode extends Class
     @children = _.reject(@children, (childNode) -> childNode is viewNode)
 
   init: ->
-    callback(@) for callback in @onInitCallbacks()
+    @viewHooks.init(@)
 
   activate: ->
     return if @isActivated()
 
     @setAsActivated()
-    callback(@) for callback in @onActivationCallbacks()
+    @viewHooks.activate(@)
 
   remove: ->
     return if @isRemoved()
@@ -67,7 +49,7 @@ class ViewNode extends Class
       @unload()
 
   unload: ->
-    callback(@) for callback in @onUnloadCallbacks()
+    @viewHooks.unload(@)
     @setAsNotActivated()
 
 
@@ -87,14 +69,5 @@ class ViewNode extends Class
 
   isRemoved: ->
     @_isRemoved ||= false
-
-  onInitCallbacks: ->
-    _onInitCallbacks
-
-  onActivationCallbacks: ->
-    _onActivationCallbacks
-
-  onUnloadCallbacks: ->
-    _onUnloadCallbacks
 
 Frames.export('views_factory_complicated/view_node', ViewNode)

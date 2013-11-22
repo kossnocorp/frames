@@ -11,13 +11,15 @@ class TreeManager extends Class
     # TODO: add ability to set order for library sources
     # (I haven't find a way of doing this)
     @ViewNode = require('views_factory_complicated/view_node')
-    @addViewNodeInitCallBack()
+    @initViewHooks()
 
     @initialNodes = []
     @nodesCache = new NodesCache()
 
-  addViewNodeInitCallBack: ->
-    @ViewNode.onInit @addViewNodeIdToElData.bind(@)
+  initViewHooks: ->
+    ViewHooks = require('views_factory_complicated/view_hooks')
+    @viewHooks = new ViewHooks
+    @viewHooks.onInit @addViewNodeIdToElData.bind(@)
 
   createTree: ->
     @setInitialNodes()
@@ -31,7 +33,7 @@ class TreeManager extends Class
     @initialNodes = []
 
     for i in [0...$els.length]
-      node = new @ViewNode($els.eq(i))
+      node = new @ViewNode($els.eq(i), @viewHooks)
       @nodesCache.add(node)
       @initialNodes.push(node)
 

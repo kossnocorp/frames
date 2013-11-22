@@ -1,6 +1,7 @@
 ViewsFactory = require('views_factory_complicated')
 TreeManager = require('views_factory_complicated/tree_manager')
 NodesCache = require('views_factory_complicated/nodes_cache')
+ViewHooks = require('views_factory_complicated/view_hooks')
 
 describe 'TreeManager', ->
 
@@ -10,13 +11,22 @@ describe 'TreeManager', ->
 
   describe 'ViewNode callbacks', ->
     before ->
-      sinon.spy(TreeManager::, 'addViewNodeInitCallBack')
+      sinon.spy(TreeManager::, 'initViewHooks')
 
-    beforeEach ->
+    it 'initializes hooks for view nodes when creating instance', ->
       @treeManager = new TreeManager
+      expect(@treeManager.initViewHooks).to.be.calledOnce
 
-    it 'adds viewNode init callback', ->
-      expect(@treeManager.addViewNodeInitCallBack).to.be.calledOnce
+    describe '.initViewHooks', ->
+      it 'saves new ViewHooks object in @viewHooks', ->
+        @treeManager = new TreeManager
+        expect(@treeManager.viewHooks.constructor).to.match(/ViewHooks/)
+
+      it 'adds @addViewNodeIdToElData init hook', ->
+        sinon.spy(ViewHooks::, 'onInit')
+        initialOnInitCallsCount = @treeManager.viewHooks.onInit.callCount
+        @treeManager = new TreeManager
+        expect(@treeManager.viewHooks.onInit.callCount).to.be.eql(initialOnInitCallsCount + 1)
 
     describe '.addViewNodeIdToElData', ->
       it "adds viewNodeId to node's $element", ->
@@ -86,6 +96,11 @@ describe 'TreeManager', ->
           @treeManager.setInitialNodes()
           initialNodesEls = @treeManager.initialNodes.map('el')
           expect(initialNodesEls).to.be.eql expectedElsArray
+
+        it 'provides @viewHooks to viewNodes constructor', ->
+          @treeManager.setInitialNodes()
+          firstViewNode = @treeManager.initialNodes[0]
+          expect(firstViewNode.viewHooks).to.be.equal @treeManager.viewHooks
 
         it 'saves viewNodes to NodesCache', ->
           sinon.spy(@treeManager.nodesCache, 'add')

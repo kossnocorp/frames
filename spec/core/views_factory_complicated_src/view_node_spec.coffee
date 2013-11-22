@@ -1,5 +1,6 @@
 ViewsFactory = require('views_factory_complicated')
 ViewNode = require('views_factory_complicated/view_node')
+ViewHooks = require('views_factory_complicated/view_hooks')
 
 describe 'ViewNode', ->
 
@@ -30,6 +31,15 @@ describe 'ViewNode', ->
     it 'has uniq id', ->
       ids = [@viewNode.id, @secondViewNode.id, @thirdViewNode.id]
       expect(ids.unique()).to.have.length 3
+
+    it 'has reference to provided ViewHooks instance if provided', ->
+      viewHooks = new ViewHooks
+      viewNode = new ViewNode(@$el, viewHooks)
+      expect(viewNode.viewHooks).to.be.equal viewHooks
+
+    it 'has reference to new empty ViewHooks instance if not viewHooks provided', ->
+      viewNode = new ViewNode(@$el)
+      expect(viewNode.viewHooks).to.be.instanceOf(ViewHooks)
 
     it 'has reference to provided jquery dom element', ->
       expect(@viewNode.$el).to.be.equal @$el
@@ -77,77 +87,41 @@ describe 'ViewNode', ->
 
   describe 'Initialization behavior', ->
 
-    before ->
-      @callback = sinon.spy()
-      @secondCallback = sinon.spy()
-      @thirdCallback = sinon.spy()
+    beforeEach ->
+      @viewHooks = new ViewHooks
+      sinon.spy(@viewHooks, 'init')
 
-      ViewNode.onInit(@callback)
-      ViewNode.onInit(@secondCallback)
-      ViewNode.onInit(@thirdCallback)
-
-    describe '#clearInitCallbacks', ->
-      it 'clears init callbacks list', ->
-        ViewNode.clearInitCallbacks()
-        expect(@viewNode.onInitCallbacks()).to.be.eql []
-
-    describe '#onInit', ->
-      it 'saves reference to provided callback inside @onInitCallbacks()', ->
-        ViewNode.onInit(@callback)
-        ViewNode.onInit(@secondCallback)
-        ViewNode.onInit(@thirdCallback)
-        expect(@viewNode.onInitCallbacks()).to.be.eql [@callback, @secondCallback, @thirdCallback]
+      @viewNode = new ViewNode(@$el, @viewHooks)
 
     describe '.init', ->
-      it 'calls @onInitCallbacks() callbacks one by one', ->
+      it 'calls @viewHooks.init method', ->
         @viewNode.init()
+        expect(@viewHooks.init).to.be.called.once
 
-        expect(@callback).to.be.called.once
-        expect(@secondCallback).to.be.called.once
-        expect(@callback).to.be.calledBefore(@secondCallback)
-        expect(@secondCallback).to.be.calledBefore(@thirdCallback)
-
-      it 'calls callbacks with current viewNode instance as first argument', ->
+      it 'calls @viewHooks.init with current viewNode instance as first argument', ->
         @viewNode.init()
-        expect(@callback.lastCall.args[0]).to.be.equal @viewNode
-
-        @secondViewNode.init()
-        expect(@callback.lastCall.args[0]).to.be.equal @secondViewNode
+        expect(@viewHooks.init.lastCall.args[0]).to.be.equal @viewNode
 
   describe 'Activation behavior', ->
 
-    before ->
-      @callback = sinon.spy()
-      @secondCallback = sinon.spy()
-      @thirdCallback = sinon.spy()
+    beforeEach ->
+      @viewHooks = new ViewHooks
+      sinon.spy(@viewHooks, 'activate')
 
-      ViewNode.onActivation(@callback)
-      ViewNode.onActivation(@secondCallback)
-      ViewNode.onActivation(@thirdCallback)
-
-    describe '#onActivation', ->
-      it 'saves reference to provided callback inside @onActivationCallbacks()', ->
-        expect(@viewNode.onActivationCallbacks()).to.be.eql [@callback, @secondCallback, @thirdCallback]
+      @viewNode = new ViewNode(@$el, @viewHooks)
 
     describe '.activate', ->
-      it 'marks viewNode as activated', ->
+      it 'calls @viewHooks.activate method', ->
+        @viewNode.activate()
+        expect(@viewHooks.activate).to.be.called.once
+
+      it 'calls @viewHooks.activate with current viewNode instance as first argument', ->
+        @viewNode.activate()
+        expect(@viewHooks.activate.lastCall.args[0]).to.be.equal @viewNode
+
+      it 'sets viewNode as activated', ->
         @viewNode.activate()
         expect(@viewNode.isActivated()).to.be.true
-
-      it 'calls @onActivationCallbacks() callbacks one by one', ->
-        @viewNode.activate()
-
-        expect(@callback).to.be.called.once
-        expect(@secondCallback).to.be.called.once
-        expect(@callback).to.be.calledBefore(@secondCallback)
-        expect(@secondCallback).to.be.calledBefore(@thirdCallback)
-
-      it 'calls callbacks with current viewNode instance as first argument', ->
-        @viewNode.activate()
-        expect(@callback.lastCall.args[0]).to.be.equal @viewNode
-
-        @secondViewNode.activate()
-        expect(@callback.lastCall.args[0]).to.be.equal @secondViewNode
 
       it 'does nothing if viewNode is already activated', ->
         @viewNode.activate()
@@ -156,37 +130,23 @@ describe 'ViewNode', ->
         @viewNode.activate()
         expect(@viewNode.setAsActivated.callCount).to.be.eql initSetAsActivatedCallsCount
 
-
   describe 'Unload behavior', ->
 
-    before ->
-      @callback = sinon.spy()
-      @secondCallback = sinon.spy()
-      @thirdCallback = sinon.spy()
+    beforeEach ->
+      @viewHooks = new ViewHooks
+      sinon.spy(@viewHooks, 'unload')
 
-      ViewNode.onUnload(@callback)
-      ViewNode.onUnload(@secondCallback)
-      ViewNode.onUnload(@thirdCallback)
-
-    describe '#onUnload', ->
-      it 'saves reference to provided callback inside @onUnloadCallbacks()', ->
-        expect(@viewNode.onUnloadCallbacks()).to.be.eql [@callback, @secondCallback, @thirdCallback]
+      @viewNode = new ViewNode(@$el, @viewHooks)
 
     describe '.unload', ->
-      it 'calls @onUnloadCallbacks() callbacks one by one', ->
+      it 'calls @viewHooks.unload method', ->
         @viewNode.unload()
 
-        expect(@callback).to.be.called.once
-        expect(@secondCallback).to.be.called.once
-        expect(@callback).to.be.calledBefore(@secondCallback)
-        expect(@secondCallback).to.be.calledBefore(@thirdCallback)
+        expect(@viewHooks.unload).to.be.called.once
 
       it 'calls callbacks with current viewNode instance as first argument', ->
         @viewNode.unload()
-        expect(@callback.lastCall.args[0]).to.be.equal @viewNode
-
-        @secondViewNode.unload()
-        expect(@callback.lastCall.args[0]).to.be.equal @secondViewNode
+        expect(@viewHooks.unload.lastCall.args[0]).to.be.equal @viewNode
 
       it 'sets viewNode as not activated', ->
         @viewNode.activate()
