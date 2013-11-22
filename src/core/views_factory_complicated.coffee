@@ -14,7 +14,33 @@ class ViewsFactory extends Class
     appSelector: APP_SELECTOR
 
   @create: ->
-    true
+    @initRemoveEvent()
+    @initRefreshEvent()
+
+  @initRemoveEvent: ->
+    return if @isRemoveEventInitialized()
+    @setRemoveEventAsInitialized()
+
+    # Special event definition
+    $.event.special.remove =
+      remove: (handleObj) ->
+        el = this
+        e =
+          type: 'remove'
+          data: handleObj.data
+          currentTarget: el
+
+        handleObj.handler(e)
+
+  @initRefreshEvent: ->
+
+  # private
+
+  @isRemoveEventInitialized: ->
+    @_isRemoveEventInitialized ||= false
+
+  @setRemoveEventAsInitialized: ->
+    @_isRemoveEventInitialized = true
 
 Frames.registerFactory(ViewsFactory, 'views')
 

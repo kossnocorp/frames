@@ -259,6 +259,28 @@ describe 'TreeManager', ->
             @treeManager.removeNode(@appNode)
             expect(@treeManager.nodesCache.getById(nodeId)).to.be.undefined
 
+
+          describe 'OnRemove event handling behavior', ->
+            it 'being called whenever dom element with viewNode being removed from DOM', ->
+              sinon.spy(@treeManager, 'removeNode')
+              $('#app1').remove()
+              expect(@treeManager.removeNode.callCount).to.be.eql 4
+
+            it 'being called in proper order', ->
+              nodes = [@appNode, @view1Node, @view2Node, @view3Node]
+              for node in nodes
+                sinon.spy(node, 'remove')
+
+              $('#app1').remove()
+
+              for node in nodes
+                expect(node.remove).to.be.calledOnce
+
+              expect(@view3Node.remove).to.be.calledBefore(@view2Node.remove)
+              expect(@view1Node.remove).to.be.calledBefore(@view2Node.remove)
+              expect(@view1Node.remove).to.be.calledBefore(@appNode.remove)
+              expect(@view2Node.remove).to.be.calledBefore(@appNode.remove)
+
         describe '.removeChildNodes', ->
           beforeEach ->
             @treeManager.setParentsForNodes(@nodes)
