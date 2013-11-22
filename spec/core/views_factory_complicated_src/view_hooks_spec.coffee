@@ -3,7 +3,7 @@ ViewHooks = require('views_factory_complicated/view_hooks')
 describe 'ViewHooks', ->
 
   beforeEach ->
-    @viewHook = new ViewHooks()
+    @viewHooks = new ViewHooks()
     @callback = sinon.spy()
     @secondCallback = sinon.spy()
     @thirdCallback = sinon.spy()
@@ -12,18 +12,18 @@ describe 'ViewHooks', ->
 
     describe '.onInit', ->
       it 'saves reference to provided callback inside @onInitCallbacks()', ->
-        @viewHook.onInit(@callback)
-        @viewHook.onInit(@secondCallback)
-        @viewHook.onInit(@thirdCallback)
+        @viewHooks.onInit(@callback)
+        @viewHooks.onInit(@secondCallback)
+        @viewHooks.onInit(@thirdCallback)
 
-        expect(@viewHook.onInitCallbacks()).to.be.eql [@callback, @secondCallback, @thirdCallback]
+        expect(@viewHooks.onInitCallbacks()).to.be.eql [@callback, @secondCallback, @thirdCallback]
 
     describe '.init', ->
       it 'calls @onInitCallbacks() callbacks one by one', ->
-        @viewHook.onInit(@callback)
-        @viewHook.onInit(@secondCallback)
-        @viewHook.onInit(@thirdCallback)
-        @viewHook.init()
+        @viewHooks.onInit(@callback)
+        @viewHooks.onInit(@secondCallback)
+        @viewHooks.onInit(@thirdCallback)
+        @viewHooks.init()
 
         expect(@callback).to.be.called.once
         expect(@secondCallback).to.be.called.once
@@ -34,9 +34,9 @@ describe 'ViewHooks', ->
         arg1 = 'argument 1'
         arg2 = 'argument 2'
 
-        @viewHook.onInit(@callback)
-        @viewHook.onInit(@secondCallback)
-        @viewHook.init(arg1, arg2)
+        @viewHooks.onInit(@callback)
+        @viewHooks.onInit(@secondCallback)
+        @viewHooks.init(arg1, arg2)
 
         expect(@callback.lastCall.args).to.be.eql [arg1, arg2]
         expect(@secondCallback.lastCall.args).to.be.eql [arg1, arg2]
@@ -45,18 +45,18 @@ describe 'ViewHooks', ->
 
     describe '.onActivation', ->
       it 'saves reference to provided callback inside @onActivationCallbacks()', ->
-        @viewHook.onActivation(@callback)
-        @viewHook.onActivation(@secondCallback)
-        @viewHook.onActivation(@thirdCallback)
+        @viewHooks.onActivation(@callback)
+        @viewHooks.onActivation(@secondCallback)
+        @viewHooks.onActivation(@thirdCallback)
 
-        expect(@viewHook.onActivationCallbacks()).to.be.eql [@callback, @secondCallback, @thirdCallback]
+        expect(@viewHooks.onActivationCallbacks()).to.be.eql [@callback, @secondCallback, @thirdCallback]
 
     describe '.activate', ->
       it 'calls @onActivationCallbacks() callbacks one by one', ->
-        @viewHook.onActivation(@callback)
-        @viewHook.onActivation(@secondCallback)
-        @viewHook.onActivation(@thirdCallback)
-        @viewHook.activate()
+        @viewHooks.onActivation(@callback)
+        @viewHooks.onActivation(@secondCallback)
+        @viewHooks.onActivation(@thirdCallback)
+        @viewHooks.activate()
 
         expect(@callback).to.be.called.once
         expect(@secondCallback).to.be.called.once
@@ -67,9 +67,9 @@ describe 'ViewHooks', ->
         arg1 = 'argument 1'
         arg2 = 'argument 2'
 
-        @viewHook.onActivation(@callback)
-        @viewHook.onActivation(@secondCallback)
-        @viewHook.activate(arg1, arg2)
+        @viewHooks.onActivation(@callback)
+        @viewHooks.onActivation(@secondCallback)
+        @viewHooks.activate(arg1, arg2)
 
         expect(@callback.lastCall.args).to.be.eql [arg1, arg2]
         expect(@secondCallback.lastCall.args).to.be.eql [arg1, arg2]
@@ -78,18 +78,18 @@ describe 'ViewHooks', ->
 
     describe '.onUnload', ->
       it 'saves reference to provided callback inside @onUnloadCallbacks()', ->
-        @viewHook.onUnload(@callback)
-        @viewHook.onUnload(@secondCallback)
-        @viewHook.onUnload(@thirdCallback)
+        @viewHooks.onUnload(@callback)
+        @viewHooks.onUnload(@secondCallback)
+        @viewHooks.onUnload(@thirdCallback)
 
-        expect(@viewHook.onUnloadCallbacks()).to.be.eql [@callback, @secondCallback, @thirdCallback]
+        expect(@viewHooks.onUnloadCallbacks()).to.be.eql [@callback, @secondCallback, @thirdCallback]
 
     describe '.unload', ->
       it 'calls @onUnloadCallbacks() callbacks one by one', ->
-        @viewHook.onUnload(@callback)
-        @viewHook.onUnload(@secondCallback)
-        @viewHook.onUnload(@thirdCallback)
-        @viewHook.unload()
+        @viewHooks.onUnload(@callback)
+        @viewHooks.onUnload(@secondCallback)
+        @viewHooks.onUnload(@thirdCallback)
+        @viewHooks.unload()
 
         expect(@callback).to.be.called.once
         expect(@secondCallback).to.be.called.once
@@ -100,9 +100,9 @@ describe 'ViewHooks', ->
         arg1 = 'argument 1'
         arg2 = 'argument 2'
 
-        @viewHook.onUnload(@callback)
-        @viewHook.onUnload(@secondCallback)
-        @viewHook.unload(arg1, arg2)
+        @viewHooks.onUnload(@callback)
+        @viewHooks.onUnload(@secondCallback)
+        @viewHooks.unload(arg1, arg2)
 
         expect(@callback.lastCall.args).to.be.eql [arg1, arg2]
         expect(@secondCallback.lastCall.args).to.be.eql [arg1, arg2]
