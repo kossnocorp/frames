@@ -51,23 +51,21 @@ class ViewsFactory extends Class
 
     $('body').on 'refresh', '*' , (e) =>
       e.stopPropagation()
+
       # finding closest element with viewNode (it can be actually e.currentTarget)
       $elWithNode = $(e.currentTarget).closest(@viewSelector())
-      nodeId      = $elWithNode.data('view-node-id')
+      nodeId = $elWithNode.data('view-node-id')
 
       # if current target don't have viewNode, searching for it's parent
       while $elWithNode.length and not nodeId
         $elWithNode = $elWithNode.parent().closest(@viewSelector())
-
         nodeId = $elWithNode.data('view-node-id')
 
       return unless nodeId
 
-      # getting access to element's viewNode through cache
       node = @treeManager.nodesCache.getById(nodeId)
-
-      # refreshing it
       @treeManager.refresh(node)
+
 
   # private
 
