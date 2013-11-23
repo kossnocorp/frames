@@ -12,8 +12,6 @@ describe 'ViewNode', ->
     sinon.spy(ViewNode::, 'setAsRemoved')
 
   beforeEach ->
-    ViewsFactory.options = {viewSelector: 'some_strange_selector'}
-
     @$el = $('div')
     @$secondEl = $('div')
     @$thirdEl = $('div')
