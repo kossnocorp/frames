@@ -2,6 +2,7 @@ ViewsFactory = require('views_factory_complicated')
 TreeManager = require('views_factory_complicated/tree_manager')
 NodesCache = require('views_factory_complicated/nodes_cache')
 ViewHooks = require('views_factory_complicated/view_hooks')
+ViewWrapper = require('views_factory_complicated/view_wrapper')
 
 describe 'TreeManager', ->
 
@@ -17,25 +18,70 @@ describe 'TreeManager', ->
       @treeManager = new TreeManager
       expect(@treeManager.initViewHooks).to.be.calledOnce
 
+    beforeEach ->
+      @$el = $('<div />')
+
     describe '.initViewHooks', ->
       it 'saves new ViewHooks object in @viewHooks', ->
         @treeManager = new TreeManager
         expect(@treeManager.viewHooks.constructor).to.match(/ViewHooks/)
 
       it 'adds @addViewNodeIdToElData init hook', ->
-        sinon.spy(ViewHooks::, 'onInit')
-        initialOnInitCallsCount = @treeManager.viewHooks.onInit.callCount
-        hooksCount = 2 # we expect 2 hooks to be triggered on init
+        sinon.spy(TreeManager::, 'addViewNodeIdToElData')
         @treeManager = new TreeManager
-        expect(@treeManager.viewHooks.onInit.callCount).to.be.eql(initialOnInitCallsCount + hooksCount)
+        viewNode = new @treeManager.ViewNode(@$el, @treeManager.viewHooks)
+        expect(@treeManager.addViewNodeIdToElData).to.be.calledOnce
+
+      it 'adds @addRemoveEventHandlerToEl init hook', ->
+        sinon.spy(TreeManager::, 'addRemoveEventHandlerToEl')
+        @treeManager = new TreeManager
+        viewNode = new @treeManager.ViewNode(@$el, @treeManager.viewHooks)
+        expect(@treeManager.addRemoveEventHandlerToEl).to.be.calledOnce
+
+      it 'adds @initView activation hook', ->
+        sinon.spy(TreeManager::, 'initView')
+        @treeManager = new TreeManager
+        viewNode = new @treeManager.ViewNode(@$el, @treeManager.viewHooks)
+        viewNode.activate()
+        expect(@treeManager.initView).to.be.calledOnce
+
+      it 'adds @unloadView unload hook', ->
+        sinon.spy(TreeManager::, 'unloadView')
+        @treeManager = new TreeManager
+        viewNode = new @treeManager.ViewNode(@$el, @treeManager.viewHooks)
+        viewNode.unload()
+        expect(@treeManager.unloadView).to.be.calledOnce
 
     describe '.addViewNodeIdToElData', ->
       it "adds viewNodeId to node's $element", ->
-        $el = $('div')
+        $el = $('<div />')
         viewNode = new @treeManager.ViewNode($el)
         @treeManager.addViewNodeIdToElData(viewNode)
 
         expect($el.data('view-node-id')).to.be.eql viewNode.id
+
+    describe '.addRemoveEventHandlerToEl', ->
+      it "adds viewNodeId to node's $element", ->
+        $el = $('<div />')
+        viewNode = new @treeManager.ViewNode($el, @treeManager.viewHooks)
+        sinon.spy(@treeManager, 'removeNode')
+        viewNode.$el.remove()
+        expect(@treeManager.removeNode).to.be.calledOnce
+
+    describe '.initView', ->
+      it 'initializes ViewWrapper instance', ->
+        $el = $('<div />')
+        viewNode = new @treeManager.ViewNode($el)
+        @treeManager.initView(viewNode)
+
+        expect(viewNode.viewWrapper).to.be.instanceOf(ViewWrapper)
+
+    describe '.unloadView', ->
+      it 'unloads ViewWrapper instance', ->
+        viewNode = {}
+        viewNode.viewWrapper = {unload: sinon.spy()}
+        @treeManager.unloadView(viewNode)
+        expect(viewNode.viewWrapper.unload).to.be.calledOnce
 
   describe 'Constructor and tree building behavior', ->
     beforeEach ->
@@ -47,6 +93,9 @@ describe 'TreeManager', ->
 
       it 'sets reference to ViewNode constructor in @ViewNode', ->
         expect(@treeManager.ViewNode).to.match(/ViewNode/)
+
+      it 'sets reference to ViewWrapper constructor in @ViewWrapper', ->
+        expect(@treeManager.ViewWrapper).to.match(/ViewWrapper/)
 
       it 'creates NodesCache instance in @nodesCache', ->
         expect(@treeManager.nodesCache).to.be.instanceOf(NodesCache)

@@ -11,6 +11,7 @@ class TreeManager extends Class
     # TODO: add ability to set order for library sources
     # (I haven't find a way of doing this)
     @ViewNode = require('views_factory_complicated/view_node')
+    @ViewWrapper = require('views_factory_complicated/view_wrapper')
     @initViewHooks()
 
     @initialNodes = []
@@ -21,6 +22,8 @@ class TreeManager extends Class
     @viewHooks = new ViewHooks
     @viewHooks.onInit @addViewNodeIdToElData.bind(@)
     @viewHooks.onInit @addRemoveEventHandlerToEl.bind(@)
+    @viewHooks.onActivation @initView.bind(@)
+    @viewHooks.onUnload @unloadView.bind(@)
 
   createTree: ->
     @setInitialNodes()
@@ -132,5 +135,11 @@ class TreeManager extends Class
 
   addRemoveEventHandlerToEl: (viewNode) ->
     viewNode.$el.on('remove', => @removeNode(viewNode))
+
+  initView: (viewNode) ->
+    viewNode.viewWrapper = new @ViewWrapper(viewNode)
+
+  unloadView: (viewNode) ->
+    viewNode.viewWrapper?.unload?()
 
 Frames.export('views_factory_complicated/tree_manager', TreeManager)
