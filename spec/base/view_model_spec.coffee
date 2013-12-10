@@ -1,4 +1,4 @@
-ViewModel = require('framework/view_model')
+ViewModel = require('frames/view_model')
 
 describe 'Frames.ViewModel', ->
 

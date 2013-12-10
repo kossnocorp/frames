@@ -1,6 +1,6 @@
-Frames = window.Frames or require('framework')
-Model = window.Model or require('framework/model')
+Frames = window.Frames or require('frames')
+Model = window.Model or require('frames/model')
 
 class ViewModel extends Model
 
-Frames.export('framework/view_model', ViewModel)
+Frames.export('frames/view_model', ViewModel)

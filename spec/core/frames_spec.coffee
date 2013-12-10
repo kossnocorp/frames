@@ -1,4 +1,4 @@
-Frames = require('framework')
+Frames = require('frames')
 
 describe 'Frames', ->
 

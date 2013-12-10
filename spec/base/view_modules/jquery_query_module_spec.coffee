@@ -1,5 +1,5 @@
-View = require('framework/view')
-JqueryQuery = require('framework/jquery_query_module')
+View = require('frames/view')
+JqueryQuery = require('frames/jquery_query_module')
 
 describe 'Frames.JqueryQuery', ->
 

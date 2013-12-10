@@ -1,4 +1,4 @@
-Router = require('framework/router')
+Router = require('frames/router')
 
 describe 'Frames.Router', ->
 

@@ -1,4 +1,4 @@
-ViewsFactory = require('framework/views_factory')
+ViewsFactory = require('frames/views_factory')
 
 describe 'ViewsFactory', ->
 

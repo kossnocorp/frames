@@ -1,4 +1,4 @@
-Class = require('framework/class')
+Class = require('frames/class')
 
 describe 'Frames.LoggerModule', ->
 

@@ -35,4 +35,4 @@ class Frames
   @__classify: (name) ->
     name.camelize()
 
-Frames.export('framework', Frames)
+Frames.export('frames', Frames)

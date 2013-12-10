@@ -1,4 +1,4 @@
-Model = require('framework/model')
+Model = require('frames/model')
 
 describe 'Frames.Model', ->
 

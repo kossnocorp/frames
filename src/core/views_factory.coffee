@@ -1,5 +1,5 @@
-Frames = window.Frames or require('framework')
-Class = window.Frames?.Class or require('framework/class')
+Frames = window.Frames or require('frames')
+Class = window.Frames?.Class or require('frames/class')
 
 class ViewsFactory extends Class
 
@@ -68,4 +68,4 @@ class ViewsFactory extends Class
 
 Frames.registerFactory(ViewsFactory, 'views')
 
-Frames.export('framework/views_factory', ViewsFactory)
+Frames.export('frames/views_factory', ViewsFactory)

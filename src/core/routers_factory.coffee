@@ -1,5 +1,5 @@
-Frames = window.Frames or require('framework')
-Class = window.Frames?.Class or require('framework/class')
+Frames = window.Frames or require('frames')
+Class = window.Frames?.Class or require('frames/class')
 Backbone = window.Backbone
 
 class RoutersFactory extends Class
@@ -34,4 +34,4 @@ class RoutersFactory extends Class
 
 Frames.registerFactory(RoutersFactory, 'routers')
 
-Frames.export('framework/routers_factory', RoutersFactory)
+Frames.export('frames/routers_factory', RoutersFactory)

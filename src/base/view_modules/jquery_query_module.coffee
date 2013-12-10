@@ -1,4 +1,4 @@
-Frames = window.Frames or require('framework')
+Frames = window.Frames or require('frames')
 
 JqueryQueryModule =
 
@@ -18,4 +18,4 @@ JqueryQueryModule =
         else
           @[fnName] = -> @$(query)
 
-Frames.export('framework/jquery_query_module', JqueryQueryModule)
+Frames.export('frames/jquery_query_module', JqueryQueryModule)

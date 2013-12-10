@@ -1,4 +1,4 @@
-View = require('framework/view')
+View = require('frames/view')
 
 describe 'View', ->
 

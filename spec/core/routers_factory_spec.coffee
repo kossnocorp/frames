@@ -1,4 +1,4 @@
-RoutersFactory = require('framework/routers_factory')
+RoutersFactory = require('frames/routers_factory')
 
 describe 'RoutersFactory', ->
 
