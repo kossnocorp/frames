@@ -93,10 +93,10 @@ There is 2 recommended ways to files organization:
 1. Single file per hook type:
 
   ```
-  + app
-    + hooks
-      - loaded_hooks.js.coffee
-      - created_hooks.js.coffee
+  app
+  `-- hooks
+      |-- loaded_hooks.js.coffee
+      `-- created_hooks.js.coffee
   ```
 
 2. File per hook:
@@ -106,15 +106,13 @@ There is 2 recommended ways to files organization:
   single class per file:
 
   ```
-  + app
-    + hooks
-      + loaded
-        - analytics_hook.js.coffee
-        - modernizr_hook.js.coffee
-        -
-      + created
-        - analytics_hook.js.coffee
-    - ...
+  app
+  `-- hooks
+      |-- loaded
+      |   |-- analytics_hook.js.coffee
+      |   `-- modernizr_hook.js.coffee
+      `-- created
+          `-- analytics_hook.js.coffee
   ```
 
 ## Custom hook types
