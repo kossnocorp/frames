@@ -2,6 +2,29 @@ Frames = require('frames')
 
 describe 'Frames', ->
 
+  describe 'launcher functional', ->
+
+    beforeEach ->
+      @contructorSpy = contructorSpy = sinon.spy()
+      @hookSpy = hookSpy = sinon.spy()
+      @Launcher = class
+        constructor: contructorSpy
+        hook: hookSpy
+
+    describe '@registerLauncher', ->
+
+      it 'creates instance of passed launcher', ->
+        Frames.registerLauncher(@Launcher)
+        expect(@contructorSpy).to.be.called
+
+    describe '@hook', ->
+
+      it 'delegates hook call to registred launcher', ->
+        callback = ->
+        Frames.registerLauncher(@Launcher)
+        Frames.hook('test', callback)
+        expect(@hookSpy).to.be.calledWith('test', callback)
+
   describe 'factories functional', ->
 
     createFakeFactory = ->
