@@ -24,9 +24,9 @@ class TrafficLights extends RedYellowGreen
 
   # Events list
   events:
-    makeRed: 'yellow -> red'
-    makeGreen: 'yellow -> green'
-    makeYellow: 'red, green -> yellow'
+    makeRed: from: 'yellow', to: 'red'
+    makeGreen: from: 'yellow', to: 'green'
+    makeYellow: from: ['red', 'green'], to: 'yellow'
 ```
 
 Usage example:
@@ -77,8 +77,8 @@ class Timer extends Frames.State
   default: 'stopped'
 
   events:
-    start: 'stopped -> started'
-    stop: 'started -> stopped'
+    start: from: 'stopped', to: 'started'
+    stop: from: 'started', to: 'stopped'
 
   # Will be called on stop() or set('stop')
   onStopped: ->
@@ -113,9 +113,9 @@ Short syntax:
 class ClassWithState extends Frames.Class
 
   @state 'lights', ['red', 'yellow', 'green'], default: 'red', events:
-    makeRed: 'yellow -> red'
-    makeGreen: 'yellow -> green'
-    makeYellow: 'red, green -> yellow'
+    makeRed: from: 'yellow', to: 'red'
+    makeGreen: from: 'yellow', to: 'green'
+    makeYellow: from: ['red', 'green'], to: 'yellow'
 ```
 
 Splitted definition:
@@ -128,9 +128,9 @@ class ClassWithState extends Frames.Class
   lightsDefault: 'red'
 
   lightsEvents:
-    makeRed: 'yellow -> red'
-    makeGreen: 'yellow -> green'
-    makeYellow: 'red, green -> yellow'
+    makeRed: from: 'yellow', to: 'red'
+    makeGreen: from: 'yellow', to: 'green'
+    makeYellow: from: ['red', 'green'], to: 'yellow'
 ```
 
 ### Usage
