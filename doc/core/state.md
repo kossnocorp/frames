@@ -1,6 +1,6 @@
 # Frames.State
 
-State is of of the base Frame classes. It represents finite state
+State is one of the base Frame classes (along with Frames.Class and Frames itself). It represents finite state
 machine.
 
 ## Usage
