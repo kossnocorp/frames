@@ -3,9 +3,23 @@ Class = window.Frames?.Class or require('frames/class')
 
 class Launcher extends Class
 
-  @attrReader('state')
+  @attr('state')
 
   constructor: ->
-    @__state = 'loaded'
+    @reset()
+    @bindReady(@setReady.bind(@))
+
+  reset: ->
+    @setState('loaded')
+
+  setReady: ->
+    @setState('ready')
+    Frames.start()
+
+  bindReady: (fn) ->
+    $(fn)
+
+  hook: (stage, fn) ->
+    fn()
 
 Frames.export('frames/launcher', Launcher)
