@@ -45,7 +45,7 @@ trafficLights.get()
 # => 'green'
 
 trafficLights.makeRed()
-# => throw ReferenceError
+# => throw "Transition from 'green' to 'red' is not allowed"
 trafficLights.get()
 # => 'green'
 ```
@@ -76,6 +76,10 @@ trafficLights.availableStates()
 
 ### Callbacks
 
+#### State callbacks
+
+State callbacks is are callbacks that are called before state transition.
+
 ``` coffeescript
 class Timer extends Frames.State
 
@@ -87,17 +91,17 @@ class Timer extends Frames.State
     start: from: 'stopped', to: 'started'
     stop: from: 'started', to: 'stopped'
 
-  # Will be called on stop() or set('stop')
+  # Will be called on stop() or set('stopped')
   onStopped: ->
 
-  # Will be called on start() or set('start')
+  # Will be called on start() or set('started')
   onStarted: ->
 ```
 
 ``` coffeescript
 timer = new Timer()
-timer.start() # timer.onStarted was called
-timer.stop()  # timer.onStopped was called
+timer.start() # timer.onStarted is called
+timer.stop()  # timer.onStopped is called
 ```
 
 ### Resetting
@@ -128,7 +132,7 @@ state.availableStates()
 #=> ['a', 'b', 'c']
 ```
 
-Same for evetns:
+Same for events:
 
 ``` coffeescript
 events =
