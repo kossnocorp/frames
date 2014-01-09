@@ -10,7 +10,7 @@ machine.
 Definition:
 
 ``` coffeescript
-class TrafficLights extends RedYellowGreen
+class TrafficLights extends Frames.State
 
   # Avaliable states list
   states: [
@@ -67,6 +67,13 @@ trafficLights.get()
 # => 'green'
 ```
 
+### Avaliable states
+
+``` coffeescript
+trafficLights.availableStates()
+#=> ['red', 'yello', 'green']
+```
+
 ### Callbacks
 
 ``` coffeescript
@@ -101,6 +108,36 @@ timer.start()
 timer.reset() # timer.onReset was called
 timer.get()
 # => 'stopped'
+```
+
+### Constructor
+
+Frames.State accepts default state as first argument:
+
+``` coffeescript
+state = new Frames.State('default')
+state.get()
+#=> 'default'
+```
+
+You can pass list of states as property of second argument:
+
+``` coffeescript
+state = new Frames.State('a', states: ['b', 'c'])
+state.availableStates()
+#=> ['a', 'b', 'c']
+```
+
+Same for evetns:
+
+``` coffeescript
+events =
+  lock: from: 'unlocked', to: 'locked'
+  unlock: from: 'locked', to: 'unlocked'
+state = new State('locked', states: ['locked', 'unlocked'], events: events)
+state.unlock()
+state.get()
+#=> 'unlocked'
 ```
 
 ## Integration with Frames.Class
