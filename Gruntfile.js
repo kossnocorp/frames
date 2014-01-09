@@ -19,6 +19,7 @@ module.exports = function (grunt) {
           'src/core/frames.coffee',
           'src/core/class_modules/*.coffee',
           'src/core/class.coffee',
+          'src/core/state.coffee',
           'src/core/*.coffee',
 
           'src/base/*_modules/*.coffee',

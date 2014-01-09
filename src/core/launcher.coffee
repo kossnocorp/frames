@@ -1,20 +1,29 @@
 Frames = window.Frames or require('frames')
 Class = window.Frames?.Class or require('frames/class')
+State = window.Frames?.State or require('frames/state')
 
 class Launcher extends Class
 
-  @attr('state')
-
   constructor: ->
-    @reset()
+    events =
+      setReady: from: 'loaded', to: 'ready'
+      setCreated: from: 'ready', to: 'created'
+
+    states = ['loaded', 'ready', 'created']
+
+    @stage = new State('loaded', {states, events})
+    #@reset()
     @bindReady(@setReady.bind(@))
 
   reset: ->
-    @setState('loaded')
+    @stage.reset()
 
   setReady: ->
-    @setState('ready')
+    @stage.setReady()
     Frames.start()
+
+  getStage: ->
+    @stage.get()
 
   bindReady: (fn) ->
     $(fn)

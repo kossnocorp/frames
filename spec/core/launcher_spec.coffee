@@ -20,7 +20,7 @@ describe 'Launcher', ->
     describe 'loaded stage', ->
 
       it 'initiates right after launcher is loaded and registered', ->
-        expect(@launcher.getState()).to.be.eq 'loaded'
+        expect(@launcher.getStage()).to.be.eq 'loaded'
 
     describe 'ready stage', ->
 
@@ -33,7 +33,7 @@ describe 'Launcher', ->
       it 'initiates once DOM is ready', ->
         spy = sinon.spy()
         @ready()
-        expect(@launcher.getState()).to.be.eq 'ready'
+        expect(@launcher.getStage()).to.be.eq 'ready'
 
       it 'calls Frames.start', ->
         expect(@startSpy).to.not.be.called
@@ -49,9 +49,9 @@ describe 'Launcher', ->
   describe '::reset', ->
 
     it 'resets launcher to initial state', ->
-      @launcher.setState('test')
+      @ready()
       @launcher.reset()
-      expect(@launcher.getState()).to.be.eq 'loaded'
+      expect(@launcher.getStage()).to.be.eq 'loaded'
 
   describe 'hook function', ->
 
