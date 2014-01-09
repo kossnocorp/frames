@@ -1,5 +1,12 @@
 class Frames
 
+  @registerLauncher: (Launcher) ->
+    @__launcher = new Launcher()
+
+  @hook: (type, callback) ->
+    throw 'Launcher is not registered' unless @__launcher
+    @__launcher.hook(type, callback)
+
   @start: ->
     return unless @factories
     Factory.create() for id, Factory of @factories
