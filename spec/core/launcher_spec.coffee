@@ -32,7 +32,6 @@ describe 'Launcher', ->
     describe 'ready stage', ->
 
       it 'initiates once DOM is ready', ->
-        spy = sinon.spy()
         @ready()
         expect(@launcher.getStage()).to.be.eq 'ready'
 
@@ -104,4 +103,4 @@ describe 'Launcher', ->
 
       it 'pauses initialization process until unpause will be called'
 
-      it "holds next stage until all unpause's will be called"
+      it 'holds next stage until all unpauses will be called'

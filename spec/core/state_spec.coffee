@@ -51,7 +51,7 @@ describe 'State', ->
     describe '::get', ->
 
       it 'gets first avaliable state as default', ->
-        expect(@lock.get()).be.be.eq 'locked'
+        expect(@lock.get()).to.be.eq 'locked'
 
       it "reads ::default property if it's defined", ->
         @Lock::default = 'unlocked'

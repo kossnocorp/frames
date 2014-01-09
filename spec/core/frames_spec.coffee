@@ -19,13 +19,13 @@ describe 'Frames', ->
 
     describe '@hook', ->
 
-      it 'delegates hook call to registred launcher', ->
+      it 'delegates hook call to registered launcher', ->
         callback = ->
         Frames.registerLauncher(@Launcher)
         Frames.hook('test', callback)
         expect(@hookSpy).to.be.calledWith('test', callback)
 
-      it 'throws error in launcher is not registred', ->
+      it 'throws error if launcher is not registred', ->
         Frames.__launcher = undefined
         expect(-> Frames.hook('test', ->)).to.throw 'Launcher is not registered'
 
