@@ -25,6 +25,10 @@ describe 'Frames', ->
         Frames.hook('test', callback)
         expect(@hookSpy).to.be.calledWith('test', callback)
 
+      it 'throws error in launcher is not registred', ->
+        Frames.__launcher = undefined
+        expect(-> Frames.hook('test', ->)).to.throw 'Launcher is not registered'
+
   describe 'factories functional', ->
 
     createFakeFactory = ->

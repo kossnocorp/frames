@@ -4,6 +4,7 @@ class Frames
     @__launcher = new Launcher()
 
   @hook: (type, callback) ->
+    throw 'Launcher is not registered' unless @__launcher
     @__launcher.hook(type, callback)
 
   @start: ->
