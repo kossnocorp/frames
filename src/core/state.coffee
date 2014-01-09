@@ -22,14 +22,14 @@ class State
     @__state
 
   set: (state) ->
-    if @__isStateDefined(state) and @__isTransitionAllowed(state)
-      callback = @__callbackFor(state)
-      callback?(@get(), state)
-      @__state = state
-    else if not @__isStateDefined(state)
-      throw "There is not '#{state}' state"
-    else
-      throw "Transition from '#{@get()}' to '#{state}' is not allowed!"
+    throw "No such state '#{state}'" unless @__isStateDefined(state)
+
+    unless @__isTransitionAllowed(state)
+      throw "Transition from '#{@get()}' to '#{state}' is not allowed"
+
+    callback = @__callbackFor(state)
+    callback?(@get(), state)
+    @__state = state
 
   reset: ->
     @onReset?(@get(), @__default())

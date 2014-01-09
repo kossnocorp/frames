@@ -67,10 +67,10 @@ describe 'State', ->
 
       it 'respects defined events', ->
         @lock.set('unlocked')
-        expect(=> @lock.set('broken')).to.throw "Transition from 'unlocked' to 'broken' is not allowed!"
+        expect(=> @lock.set('broken')).to.throw "Transition from 'unlocked' to 'broken' is not allowed"
 
       it 'throw error if state is not defined', ->
-        expect(=> @lock.set('burned')).to.throw "There is not 'burned' state"
+        expect(=> @lock.set('burned')).to.throw "No such state 'burned'"
 
     describe '::reset', ->
 
@@ -125,7 +125,7 @@ describe 'State', ->
         expect(@lights.get()).to.be.eq 'yellow'
 
       it 'throw expection if transition is not allowed', ->
-        expect(=> @lights.makeGreen()).to.throw("Transition from 'red' to 'green' is not allowed!")
+        expect(=> @lights.makeGreen()).to.throw("Transition from 'red' to 'green' is not allowed")
 
     describe 'callbacks', ->
 
