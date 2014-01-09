@@ -16,19 +16,11 @@ class Launcher extends Class
 
     @stage = new State('loaded', {states, events})
 
-    @stage.onReady = =>
-      @__passedStages.push('ready')
-      if @__hooks['ready']
-        @__call(fn) for fn in @__hooks['ready']
-
+    @stage.onReady = @__stageTransition 'ready', =>
       Frames.start()
-
       setTimeout((=> @stage.setCreated()), 0)
 
-    @stage.onCreated = =>
-      @__passedStages.push('created')
-      if @__hooks['created']
-        @__call(fn) for fn in @__hooks['created']
+    @stage.onCreated = @__stageTransition('created')
 
     @__bindReady(@setReady.bind(@))
 
@@ -48,7 +40,18 @@ class Launcher extends Class
   hook: (stage, fn) ->
     @__hooks[stage] ?= []
     @__hooks[stage].push(fn)
+
     @__call(fn) if @__passedStages.indexOf(stage) isnt -1
+
+  __stageTransition: (stage, after) ->
+    =>
+      @__passedStages.push(stage)
+      @__callStage(stage)
+      after?()
+
+  __callStage: (stage) ->
+    if @__hooks[stage]
+      @__call(fn) for fn in @__hooks[stage]
 
   __call: (fn) ->
     setTimeout(fn, 0)
