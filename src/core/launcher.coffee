@@ -34,14 +34,14 @@ class Launcher extends Class
   getStage: ->
     @stage.get()
 
-  __bindReady: (fn) ->
-    $(fn)
-
   hook: (stage, fn) ->
     @__hooks[stage] ?= []
     @__hooks[stage].push(fn)
 
     @__call(fn) if @__passedStages.indexOf(stage) isnt -1
+
+  __bindReady: (fn) ->
+    $(fn)
 
   __stageTransition: (stage, after) ->
     =>
