@@ -155,21 +155,6 @@ class ClassWithState extends Frames.Class
     makeYellow: from: ['red', 'green'], to: 'yellow'
 ```
 
-Splitted definition:
-
-``` coffeescript
-class ClassWithState extends Frames.Class
-
-  @state 'lights', ['red', 'yellow', 'green']
-
-  lightsDefault: 'red'
-
-  lightsEvents:
-    makeRed: from: 'yellow', to: 'red'
-    makeGreen: from: 'yellow', to: 'green'
-    makeYellow: from: ['red', 'green'], to: 'yellow'
-```
-
 ### Usage
 
 ``` coffeescript

@@ -6,15 +6,15 @@ Launcher automatically runs `Frames.start` once DOM is ready so you
 don't need to do it manually. It simplifies process of starting work on
 new application and keeps code a bit cleaner.
 
-Second purpose is a hooks. Pretty often you need to run some code
+Second purpose is hooks. Pretty often you need to run some code
 before DOM will be completly loaded (e.g CSS3 fallbacks), right before
-application will be started (e.g data preparation) of after. Launcher
-gives ability to add hooks on all of these stages, as well as create
+application will be started (e.g data preparation) or after. Launcher
+give an ability to add hooks on all of these stages, as well as create
 custom hook types and hook processors.
 
 ## Initialization stages
 
-There is tree main stages of application initialization process:
+There are three main stages of application initialization process:
 
 * Framework code is loaded (`loaded` hook),
 * DOM is ready (`ready` hook),
@@ -25,7 +25,7 @@ There is tree main stages of application initialization process:
 If you are using [Ruby on Rails integration](https://github.com/kossnocorp/frames/blob/master/doc/rails.md)
 you don't need to do anything.
 
-In case when you need to customize list of used [Frames modules](https://github.com/kossnocorp/frames/blob/master/doc/modules.md)
+In case if you need to customize a list of used [Frames modules](https://github.com/kossnocorp/frames/blob/master/doc/modules.md)
 or if you want to use your custom launcher you have to put launcher file
 require to your file to core modules manifest.
 
@@ -44,40 +44,44 @@ Frames.hook 'loaded', ->
 There is no way to specify callbacks order, so they should be isolated
 and independent.
 
-There is tree hook types respresents main stages:
+There are three hook types respresents main stages:
 
 * `loaded` - runs callback once Frames code is loaded.
 * `ready` - callback will be called on DOM ready.
 * `created` - callback will be called after all factories are worked.
 
-If hook will be added after stage is initialized in will be called
+If hook is added after stage initialization passed it will be called
 immediately.
 
 ## Holding stages
 
 If you need to pause initialization process (e.g when you need to fetch
-some important initial data), you can use `pause` function passed to
-callback as first argument. To continue initialization you need to
-call `unpause` passed as second argument:
+some important initial data), you can use `hook.pause` function passed
+to callback as first argument. To continue initialization you need to
+call `hook.unpause`.
 
 ``` coffeescript
-Frames.hook 'loaded', (pause, unpause) ->
-  pause()
-  doSomeStuff ->
-    unpause()
+Frames.hook 'loaded', (hook) ->
+  hook.pause ->
+    fetchSomeData()
 ```
 
-`pause` function will not affect another hooks attached to the current
-stage. Rest hooks will be called in same order as before. But when
-`unpause` function is not yet called and in the same time framework is
-ready to move up to the next stage (e.g `ready`) then stage transition
-will be posponed until `unpause` function is called.
+Once `fetchSomeData finished polling data, unpause will be called
+automatically. If no callback provided, `hook.unpause` should be called
+explicitly.
+
+`hook.pause` function will not affect another hooks attached to the
+current stage. Rest hooks will be called in same order as before. But
+when `hook.unpause` function is not yet called and in the same time
+framework is ready to move up to the next stage (e.g from `loaded` to
+`ready`) then stage transition will be posponed until `hook.unpause`
+function is called.
 
 You can use as many pauses as you want to. Next stage will be started
 once all unpause functions are called.
 
 **Warning**: in the given example `pause` blocks initialization process
-and creation of factories will be holded. What is mean that no views
+and creation of factories will be holded. That means that no views
 will be created. It may have significant impact on application
 responsobility but sometimes it's really usefull.
 
@@ -88,7 +92,7 @@ async loading of application components.
 
 ## Files organization
 
-There is 2 recommended ways to files organization:
+There are 2 ways of files organization:
 
 1. Single file per hook type:
 
@@ -129,21 +133,21 @@ TODO
 
 ### Document events
 
-It's an optional hooks extension coming with Frames which simplifying
-process of binding documents events to views.
+It's an optional hooks extension coming with Frames which simplifies
+process of binding document events to views.
 
-This is solution for two issues:
+This resolves 2 problems:
 
 * With Turbolinks you can't keep document bindings in views because of
   memory leaking and fantom behavior (caused by multiply bindings to
   same events).
-* And in general it's a bad idea to do it because it makes isolation
-  breach and one day you will meet problem with behaviors conflict,
-  leaked memory and will spend hours in debugger.
+* And in general it's a bad idea to do it because it may make an
+  isolation breach and one day you will meet problem with behaviors
+  conflict, leaked memory and will spend hours in debugger.
 
-It's adds loaded hook and delegated all document (and body) events to all the views via pub/sub service.
+It adds loaded hook and delegated all document (and body) events to all the views via pub/sub service.
 
-It's also disallows all document bind calls from views to prevent accidentally attached callbacks.
+It also disallows all document bind calls from views to prevent accidentally attached callbacks.
 
 This is default behavior, but as other extension features it can be adjusted.
 
