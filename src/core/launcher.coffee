@@ -56,4 +56,6 @@ class Launcher extends Class
   __call: (fn) ->
     setTimeout(fn, 0)
 
+Frames.registerLauncher(Launcher)
+
 Frames.export('frames/launcher', Launcher)
