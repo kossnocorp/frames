@@ -5,3 +5,7 @@ Frames is a powerful front-end framework based on philosophy "less is more". It 
 
 README coming soon.
 
+
+
+[![Bitdeli Badge](https://d2weczhvl823v0.cloudfront.net/kossnocorp/frames/trend.png)](https://bitdeli.com/free "Bitdeli Badge")
+
