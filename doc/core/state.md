@@ -1,7 +1,7 @@
 # Frames.State
 
-State is one of the base Frame classes (along with Frames.Class and Frames itself). It represents finite state
-machine.
+State is one of [the base Frames core classes](./../base_core_classes.md).
+It represents [finite-state machine](http://en.wikipedia.org/wiki/Finite-state_machine).
 
 ## Usage
 
