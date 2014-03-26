@@ -7,18 +7,12 @@
   "devDependencies": {
     "coffee-script": "",
     "karma": "",
-    "mocha": "",
+    "karma-cli": "",
+    "karma-html2js-preprocessor": "",
+    "karma-coffee-preprocessor": "",
+    "karma-phantomjs-launcher": "",
     "karma-mocha": "",
-    "chai": "",
-    "karma-chai": "",
-    "sinon": "",
-    "sinon-chai": "",
-    "karma-sinon-chai": "",
-    "grunt": "",
-    "grunt-cli": "",
-    "grunt-karma": "",
-    "grunt-contrib-coffee": "",
-    "grunt-contrib-uglify": ""
+    "karma-chai-sinon": ""
   },
 
   "engine": {
@@ -26,7 +20,7 @@
   },
 
   "scripts": {
-    "test": "./node_modules/grunt-cli/bin/grunt karma:ci"
+    "test": "./node_modules/.bin/karma start --single-run --browsers PhantomJS"
   },
 
   "license": "MIT"
