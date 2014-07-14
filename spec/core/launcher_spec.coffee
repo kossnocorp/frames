@@ -29,8 +29,14 @@ describe 'Launcher', ->
       it 'initiates right after launcher is loaded and registered', ->
         expect(@launcher.getStage()).to.be.eq 'loaded'
 
-    describe 'ready stage', ->
+      it 'calls Frames.createExtendables', ->
+        @extendablesSpy = sinon.spy(Frames, 'createExtendables')
+        expect(@extendablesSpy).to.be.not.called
+        launcher = new Launcher()
+        expect(launcher.getStage()).to.be.eq 'loaded'
+        expect(@extendablesSpy).to.be.called
 
+    describe 'ready stage', ->
       it 'initiates once DOM is ready', ->
         @ready()
         expect(@launcher.getStage()).to.be.eq 'ready'

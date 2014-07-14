@@ -8,6 +8,8 @@ class Launcher extends Class
     @__hooks = {}
     @__passedStages = ['loaded']
 
+    Frames.createExtendables()
+
     events =
       setReady: {from: 'loaded', to: 'ready'}
       setCreated: {from: 'ready', to: 'created'}
