@@ -1,7 +1,7 @@
 /*! frames (v0.1.1),
  Front-end framework,
  by Sasha Koss <kossnocorp@gmail.com>
- Mon Jul 14 2014 */
+ Tue Jul 15 2014 */
 (function() {
   var modules;
 
@@ -27,10 +27,43 @@
 }).call(this);
 
 (function() {
-  var Frames;
+  var Frames,
+    __hasProp = {}.hasOwnProperty,
+    __slice = [].slice;
 
   Frames = (function() {
     function Frames() {}
+
+    Frames.Extendables = {};
+
+    Frames.createExtendables = function() {
+      var klass, name, _ref, _results;
+      if (this.extendables == null) {
+        this.extendables = {};
+      }
+      _ref = this.Extendables;
+      _results = [];
+      for (name in _ref) {
+        if (!__hasProp.call(_ref, name)) continue;
+        klass = _ref[name];
+        if (!Object.isFunction(klass.prototype.extended)) {
+          throw 'Trying to initialize extendable module, but #extended method is not specified for it.';
+        }
+        _results.push(this.extendables[name.underscore()] = new klass());
+      }
+      return _results;
+    };
+
+    Frames.runExtendables = function() {};
+
+    Frames.extend = function() {
+      var args, moduleName, _ref;
+      moduleName = arguments[0], args = 2 <= arguments.length ? __slice.call(arguments, 1) : [];
+      if (this.extendables[moduleName] == null) {
+        throw "Trying to extend module " + (moduleName.camelize()) + ", but it is not registered.";
+      }
+      return (_ref = this.extendables[moduleName]).extended.apply(_ref, args);
+    };
 
     Frames.registerLauncher = function(Launcher) {
       return this.__launcher = new Launcher();
@@ -44,73 +77,18 @@
     };
 
     Frames.start = function() {
-      var Factory, id, _ref, _results;
-      if (!this.factories) {
-        return;
-      }
-      _ref = this.factories;
+      var extendable, name, _ref, _results;
+      _ref = this.extendables;
       _results = [];
-      for (id in _ref) {
-        Factory = _ref[id];
-        _results.push(Factory.create());
+      for (name in _ref) {
+        if (!__hasProp.call(_ref, name)) continue;
+        extendable = _ref[name];
+        _results.push(typeof extendable.ready === "function" ? extendable.ready() : void 0);
       }
       return _results;
     };
 
-    Frames.stop = function() {
-      var Factory, id, _ref, _results;
-      if (!this.factories) {
-        return;
-      }
-      _ref = this.factories;
-      _results = [];
-      for (id in _ref) {
-        Factory = _ref[id];
-        _results.push(Factory.destroy());
-      }
-      return _results;
-    };
-
-    Frames.registerFactory = function(Factory, type) {
-      var id;
-      if (this.factoryCounter == null) {
-        this.factoryCounter = 0;
-      }
-      if (this.factories == null) {
-        this.factories = {};
-      }
-      id = type || ("factory_" + (this.factoryCounter++));
-      this.factories[id] = Factory;
-      return id;
-    };
-
-    Frames["export"] = function(name, Module) {
-      if (typeof modula !== "undefined" && modula !== null) {
-        return modula["export"](name, Module);
-      } else {
-        return this.__exportToWindow(name, Module);
-      }
-    };
-
-    Frames.__exportToWindow = function(name, Module) {
-      var chunks, lastChunk;
-      chunks = name.split('/');
-      lastChunk = chunks.pop();
-      return this.__getOrCreateNamespacePath(chunks)[this.__classify(lastChunk)] = Module;
-    };
-
-    Frames.__getOrCreateNamespacePath = function(chunks) {
-      return chunks.reduce(this.__getOrCreateNamespaceChunk.bind(this), window);
-    };
-
-    Frames.__getOrCreateNamespaceChunk = function(object, chunk) {
-      var _name;
-      return object[_name = this.__classify(chunk)] != null ? object[_name] : object[_name] = {};
-    };
-
-    Frames.__classify = function(name) {
-      return name.camelize();
-    };
+    Frames.stop = function() {};
 
     return Frames;
 
@@ -435,6 +413,7 @@
       var events, states;
       this.__hooks = {};
       this.__passedStages = ['loaded'];
+      Frames.createExtendables();
       events = {
         setReady: {
           from: 'loaded',
@@ -593,8 +572,6 @@
 
   })(Class);
 
-  Frames.registerFactory(RoutersFactory, 'routers');
-
   modula["export"]('frames/routers_factory', RoutersFactory);
 
 }).call(this);
@@ -746,8 +723,6 @@
 
   })(Class);
 
-  Frames.registerFactory(ViewsFactory, 'views');
-
   modula["export"]('frames/views_factory', ViewsFactory);
 
 }).call(this);
@@ -826,6 +801,66 @@
   };
 
   modula["export"]('frames/pub_sub_module', PubSubModule);
+
+}).call(this);
+
+(function() {
+  var Frames,
+    __slice = [].slice;
+
+  Frames = modula.require('frames');
+
+  Frames.Extendables.RoutersFactory = (function() {
+    function RoutersFactory() {
+      this.routersFactory = modula.require('frames/routers_factory');
+    }
+
+    RoutersFactory.prototype.extended = function() {
+      var args, routersFactory;
+      args = 1 <= arguments.length ? __slice.call(arguments, 0) : [];
+      routersFactory = args[0];
+      return this.routersFactory = routersFactory;
+    };
+
+    RoutersFactory.prototype.ready = function() {
+      return this.routersFactory.create();
+    };
+
+    return RoutersFactory;
+
+  })();
+
+  modula["export"]('frames/extendables/routersFactory', Frames.Extendables.RoutersFactory);
+
+}).call(this);
+
+(function() {
+  var Frames,
+    __slice = [].slice;
+
+  Frames = modula.require('frames');
+
+  Frames.Extendables.ViewsFactory = (function() {
+    function ViewsFactory() {
+      this.viewsFactory = modula.require('frames/views_factory');
+    }
+
+    ViewsFactory.prototype.extended = function() {
+      var args, viewsFactory;
+      args = 1 <= arguments.length ? __slice.call(arguments, 0) : [];
+      viewsFactory = args[0];
+      return this.viewsFactory = viewsFactory;
+    };
+
+    ViewsFactory.prototype.ready = function() {
+      return this.viewsFactory.create();
+    };
+
+    return ViewsFactory;
+
+  })();
+
+  modula["export"]('frames/extendables/views_factory', Frames.Extendables.ViewsFactory);
 
 }).call(this);
 
