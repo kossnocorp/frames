@@ -1,5 +1,5 @@
-View = require('frames/view')
-JqueryQuery = require('frames/jquery_query_module')
+View = modula.require('frames/view')
+JqueryQuery = modula.require('frames/jquery_query_module')
 
 describe 'Frames.JqueryQuery', ->
 

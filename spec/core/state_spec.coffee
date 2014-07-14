@@ -1,4 +1,4 @@
-State = require('frames/state')
+State = modula.require('frames/state')
 
 describe 'State', ->
 

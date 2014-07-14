@@ -8,10 +8,6 @@
   "description": "Front-end framework",
   "main": "build/frames.min.js",
 
-  "devDependencies": {
-    "modula": ""
-  },
-
   "dependencies": {
     "jquery": "",
     "underscore": "",

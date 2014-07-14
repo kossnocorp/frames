@@ -1,4 +1,4 @@
-View = require('frames/view')
+View = modula.require('frames/view')
 
 describe 'Frames.PubSubModule', ->
 

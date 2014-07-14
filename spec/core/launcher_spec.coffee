@@ -1,5 +1,5 @@
-Frames = require('frames')
-Launcher = require('frames/launcher')
+Frames = modula.require('frames')
+Launcher = modula.require('frames/launcher')
 
 describe 'Launcher', ->
 

@@ -1,4 +1,4 @@
-Frames = require('frames')
+Frames = modula.require('frames')
 
 describe 'Frames', ->
 

@@ -1,3 +1,4 @@
+#= require modula
 #= require ./vendor
 #= require ./core/framework
 #= require ./core/class

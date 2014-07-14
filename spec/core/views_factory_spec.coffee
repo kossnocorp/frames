@@ -1,4 +1,4 @@
-ViewsFactory = require('frames/views_factory')
+ViewsFactory = modula.require('frames/views_factory')
 
 describe 'ViewsFactory', ->
 

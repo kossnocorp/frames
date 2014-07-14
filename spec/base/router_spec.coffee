@@ -1,4 +1,4 @@
-Router = require('frames/router')
+Router = modula.require('frames/router')
 
 describe 'Frames.Router', ->
 

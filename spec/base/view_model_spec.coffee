@@ -1,4 +1,4 @@
-ViewModel = require('frames/view_model')
+ViewModel = modula.require('frames/view_model')
 
 describe 'Frames.ViewModel', ->
 

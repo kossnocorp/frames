@@ -3,6 +3,30 @@
  by Sasha Koss <kossnocorp@gmail.com>
  Mon Jul 14 2014 */
 (function() {
+  var modules;
+
+  modules = {};
+
+  if (window.modula == null) {
+    window.modula = {
+      "export": function(name, exports) {
+        return modules[name] = exports;
+      },
+      require: function(name) {
+        var Module;
+        Module = modules[name];
+        if (Module) {
+          return Module;
+        } else {
+          throw "Module '" + name + "' not found.";
+        }
+      }
+    };
+  }
+
+}).call(this);
+
+(function() {
   var Frames;
 
   Frames = (function() {
@@ -92,7 +116,7 @@
 
   })();
 
-  Frames["export"]('frames', Frames);
+  modula["export"]('frames', Frames);
 
 }).call(this);
 
@@ -100,7 +124,7 @@
   var Echo, Frames, LEVELS, LoggerModule, level, _i, _len,
     __slice = [].slice;
 
-  Frames = window.Frames || require('frames');
+  Frames = modula.require('frames');
 
   Echo = window.Echo;
 
@@ -135,16 +159,16 @@
     };
   }
 
-  Frames["export"]('frames/logger_module', LoggerModule);
+  modula["export"]('frames/logger_module', LoggerModule);
 
 }).call(this);
 
 (function() {
   var Backbone, Class, Frames, LoggerModule, klass, _i, _len, _ref;
 
-  Frames = window.Frames || require('frames');
+  Frames = modula.require('frames');
 
-  LoggerModule = Frames.LoggerModule || require('frames/logger_module');
+  LoggerModule = modula.require('frames/logger_module');
 
   Backbone = window.Backbone;
 
@@ -259,14 +283,14 @@
     Class.patch(Backbone[klass]);
   }
 
-  Frames["export"]('frames/class', Class);
+  modula["export"]('frames/class', Class);
 
 }).call(this);
 
 (function() {
   var Frames, State;
 
-  Frames = window.Frames || require('frames');
+  Frames = modula.require('frames');
 
   State = (function() {
     function State(defaultState, options) {
@@ -389,20 +413,20 @@
 
   })();
 
-  Frames["export"]('frames/state', State);
+  modula["export"]('frames/state', State);
 
 }).call(this);
 
 (function() {
-  var Class, Frames, Launcher, State, _ref, _ref1,
+  var Class, Frames, Launcher, State,
     __hasProp = {}.hasOwnProperty,
     __extends = function(child, parent) { for (var key in parent) { if (__hasProp.call(parent, key)) child[key] = parent[key]; } function ctor() { this.constructor = child; } ctor.prototype = parent.prototype; child.prototype = new ctor(); child.__super__ = parent.prototype; return child; };
 
-  Frames = window.Frames || require('frames');
+  Frames = modula.require('frames');
 
-  Class = ((_ref = window.Frames) != null ? _ref.Class : void 0) || require('frames/class');
+  Class = modula.require('frames/class');
 
-  State = ((_ref1 = window.Frames) != null ? _ref1.State : void 0) || require('frames/state');
+  State = modula.require('frames/state');
 
   Launcher = (function(_super) {
     __extends(Launcher, _super);
@@ -477,12 +501,12 @@
     };
 
     Launcher.prototype.__callStage = function(stage) {
-      var fn, _i, _len, _ref2, _results;
+      var fn, _i, _len, _ref, _results;
       if (this.__hooks[stage]) {
-        _ref2 = this.__hooks[stage];
+        _ref = this.__hooks[stage];
         _results = [];
-        for (_i = 0, _len = _ref2.length; _i < _len; _i++) {
-          fn = _ref2[_i];
+        for (_i = 0, _len = _ref.length; _i < _len; _i++) {
+          fn = _ref[_i];
           _results.push(this.__call(fn));
         }
         return _results;
@@ -499,18 +523,18 @@
 
   Frames.registerLauncher(Launcher);
 
-  Frames["export"]('frames/launcher', Launcher);
+  modula["export"]('frames/launcher', Launcher);
 
 }).call(this);
 
 (function() {
-  var Backbone, Class, Frames, RoutersFactory, _ref,
+  var Backbone, Class, Frames, RoutersFactory,
     __hasProp = {}.hasOwnProperty,
     __extends = function(child, parent) { for (var key in parent) { if (__hasProp.call(parent, key)) child[key] = parent[key]; } function ctor() { this.constructor = child; } ctor.prototype = parent.prototype; child.prototype = new ctor(); child.__super__ = parent.prototype; return child; };
 
-  Frames = window.Frames || require('frames');
+  Frames = modula.require('frames');
 
-  Class = ((_ref = window.Frames) != null ? _ref.Class : void 0) || require('frames/class');
+  Class = modula.require('frames/class');
 
   Backbone = window.Backbone;
 
@@ -571,18 +595,18 @@
 
   Frames.registerFactory(RoutersFactory, 'routers');
 
-  Frames["export"]('frames/routers_factory', RoutersFactory);
+  modula["export"]('frames/routers_factory', RoutersFactory);
 
 }).call(this);
 
 (function() {
-  var Class, Frames, ViewsFactory, _ref,
+  var Class, Frames, ViewsFactory,
     __hasProp = {}.hasOwnProperty,
     __extends = function(child, parent) { for (var key in parent) { if (__hasProp.call(parent, key)) child[key] = parent[key]; } function ctor() { this.constructor = child; } ctor.prototype = parent.prototype; child.prototype = new ctor(); child.__super__ = parent.prototype; return child; };
 
-  Frames = window.Frames || require('frames');
+  Frames = modula.require('frames');
 
-  Class = ((_ref = window.Frames) != null ? _ref.Class : void 0) || require('frames/class');
+  Class = modula.require('frames/class');
 
   ViewsFactory = (function(_super) {
     var ROOT_SELECTOR, VIEWS_SELECTOR, VIEW_NAME_SPLITTER, VIEW_PATH_WITH_COMPONENT_PATTERN;
@@ -681,8 +705,8 @@
     };
 
     ViewsFactory.getViewClass = function(viewPath) {
-      var ComponentClass, ViewClass, componentClassName, componentName, viewClassName, viewName, __, _ref1;
-      _ref1 = viewPath.match(VIEW_PATH_WITH_COMPONENT_PATTERN), __ = _ref1[0], componentName = _ref1[1], viewName = _ref1[2];
+      var ComponentClass, ViewClass, componentClassName, componentName, viewClassName, viewName, __, _ref;
+      _ref = viewPath.match(VIEW_PATH_WITH_COMPONENT_PATTERN), __ = _ref[0], componentName = _ref[1], viewName = _ref[2];
       componentClassName = this.getComponentClassName(componentName);
       viewClassName = this.getViewClassName(viewName);
       ComponentClass = window[componentClassName];
@@ -724,14 +748,14 @@
 
   Frames.registerFactory(ViewsFactory, 'views');
 
-  Frames["export"]('frames/views_factory', ViewsFactory);
+  modula["export"]('frames/views_factory', ViewsFactory);
 
 }).call(this);
 
 (function() {
   var Frames, JqueryQueryModule;
 
-  Frames = window.Frames || require('frames');
+  Frames = modula.require('frames');
 
   JqueryQueryModule = {
     included: function(klass) {
@@ -771,14 +795,14 @@
     }
   };
 
-  Frames["export"]('frames/jquery_query_module', JqueryQueryModule);
+  modula["export"]('frames/jquery_query_module', JqueryQueryModule);
 
 }).call(this);
 
 (function() {
   var Frames, PubSubModule;
 
-  Frames = window.Frames || require('frames');
+  Frames = modula.require('frames');
 
   PubSubModule = {
     included: function(klass) {
@@ -801,16 +825,16 @@
     }
   };
 
-  Frames["export"]('frames/pub_sub_module', PubSubModule);
+  modula["export"]('frames/pub_sub_module', PubSubModule);
 
 }).call(this);
 
 (function() {
-  var Backbone, Frames, Model,
+  var Backbone, Model,
     __hasProp = {}.hasOwnProperty,
     __extends = function(child, parent) { for (var key in parent) { if (__hasProp.call(parent, key)) child[key] = parent[key]; } function ctor() { this.constructor = child; } ctor.prototype = parent.prototype; child.prototype = new ctor(); child.__super__ = parent.prototype; return child; };
 
-  Frames = window.Frames || require('frames');
+  modula.require('frames');
 
   Backbone = window.Backbone;
 
@@ -825,7 +849,7 @@
 
   })(Backbone.Model);
 
-  Frames["export"]('frames/model', Model);
+  modula["export"]('frames/model', Model);
 
 }).call(this);
 
@@ -834,7 +858,7 @@
     __hasProp = {}.hasOwnProperty,
     __extends = function(child, parent) { for (var key in parent) { if (__hasProp.call(parent, key)) child[key] = parent[key]; } function ctor() { this.constructor = child; } ctor.prototype = parent.prototype; child.prototype = new ctor(); child.__super__ = parent.prototype; return child; };
 
-  Frames = window.Frames || require('frames');
+  Frames = modula.require('frames');
 
   Backbone = window.Backbone;
 
@@ -872,7 +896,7 @@
 
   })(Backbone.Router);
 
-  Frames["export"]('frames/router', Router);
+  modula["export"]('frames/router', Router);
 
 }).call(this);
 
@@ -881,11 +905,11 @@
     __hasProp = {}.hasOwnProperty,
     __extends = function(child, parent) { for (var key in parent) { if (__hasProp.call(parent, key)) child[key] = parent[key]; } function ctor() { this.constructor = child; } ctor.prototype = parent.prototype; child.prototype = new ctor(); child.__super__ = parent.prototype; return child; };
 
-  Frames = window.Frames || require('frames');
+  Frames = modula.require('frames');
 
-  PubSubModule = Frames.PubSubModule || require('frames/pub_sub_module');
+  PubSubModule = modula.require('frames/pub_sub_module');
 
-  JqueryQueryModule = Frames.JqueryQueryModule || require('frames/jquery_query_module');
+  JqueryQueryModule = modula.require('frames/jquery_query_module');
 
   Backbone = window.Backbone;
 
@@ -940,7 +964,7 @@
 
   })(Backbone.View);
 
-  Frames["export"]('frames/view', View);
+  modula["export"]('frames/view', View);
 
 }).call(this);
 
@@ -949,9 +973,9 @@
     __hasProp = {}.hasOwnProperty,
     __extends = function(child, parent) { for (var key in parent) { if (__hasProp.call(parent, key)) child[key] = parent[key]; } function ctor() { this.constructor = child; } ctor.prototype = parent.prototype; child.prototype = new ctor(); child.__super__ = parent.prototype; return child; };
 
-  Frames = window.Frames || require('frames');
+  Frames = modula.require('frames');
 
-  Model = Frames.Model || require('frames/model');
+  Model = modula.require('frames/model');
 
   ViewModel = (function(_super) {
     __extends(ViewModel, _super);
@@ -964,6 +988,6 @@
 
   })(Model);
 
-  Frames["export"]('frames/view_model', ViewModel);
+  modula["export"]('frames/view_model', ViewModel);
 
 }).call(this);

@@ -1,4 +1,4 @@
-Class = require('frames/class')
+Class = modula.require('frames/class')
 
 describe 'Class', ->
 

@@ -1,4 +1,4 @@
-RoutersFactory = require('frames/routers_factory')
+RoutersFactory = modula.require('frames/routers_factory')
 
 describe 'RoutersFactory', ->
 

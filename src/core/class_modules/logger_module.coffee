@@ -1,4 +1,4 @@
-Frames = window.Frames || require('frames')
+Frames = modula.require('frames')
 Echo = window.Echo
 
 LEVELS = 'debug info warn error'.split(' ')
@@ -19,4 +19,4 @@ for level in LEVELS
   LoggerModule[level] = (text, options) ->
     @log(text, Object.extended(options).clone().merge {level})
 
-Frames.export('frames/logger_module', LoggerModule)
+modula.export('frames/logger_module', LoggerModule)

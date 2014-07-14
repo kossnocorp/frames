@@ -15,6 +15,7 @@ projectHeader = "/*! #{p.name} (v#{p.version}),\n
                 #{new Date().toDateString()} */\n"
 
 sourceFiles = [
+  'src/modula.coffee'
   'src/core/frames.coffee'
   'src/core/class_modules/*.coffee'
   'src/core/class.coffee'

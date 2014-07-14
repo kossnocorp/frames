@@ -1,4 +1,4 @@
-Model = require('frames/model')
+Model = modula.require('frames/model')
 
 describe 'Frames.Model', ->
 
