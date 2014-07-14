@@ -864,7 +864,7 @@
 }).call(this);
 
 (function() {
-  var Backbone, Model,
+  var Backbone,
     __hasProp = {}.hasOwnProperty,
     __extends = function(child, parent) { for (var key in parent) { if (__hasProp.call(parent, key)) child[key] = parent[key]; } function ctor() { this.constructor = child; } ctor.prototype = parent.prototype; child.prototype = new ctor(); child.__super__ = parent.prototype; return child; };
 
@@ -872,7 +872,7 @@
 
   Backbone = window.Backbone;
 
-  Model = (function(_super) {
+  Frames.Model = (function(_super) {
     __extends(Model, _super);
 
     function Model() {
@@ -883,12 +883,12 @@
 
   })(Backbone.Model);
 
-  modula["export"]('frames/model', Model);
+  modula["export"]('frames/model', Frames.Model);
 
 }).call(this);
 
 (function() {
-  var Backbone, Frames, Router,
+  var Backbone, Frames,
     __hasProp = {}.hasOwnProperty,
     __extends = function(child, parent) { for (var key in parent) { if (__hasProp.call(parent, key)) child[key] = parent[key]; } function ctor() { this.constructor = child; } ctor.prototype = parent.prototype; child.prototype = new ctor(); child.__super__ = parent.prototype; return child; };
 
@@ -896,7 +896,7 @@
 
   Backbone = window.Backbone;
 
-  Router = (function(_super) {
+  Frames.Router = (function(_super) {
     __extends(Router, _super);
 
     function Router() {
@@ -930,12 +930,12 @@
 
   })(Backbone.Router);
 
-  modula["export"]('frames/router', Router);
+  modula["export"]('frames/router', Frames.Router);
 
 }).call(this);
 
 (function() {
-  var Backbone, Frames, JqueryQueryModule, PubSubModule, View, originRemove,
+  var Backbone, Frames, JqueryQueryModule, PubSubModule, originRemove,
     __hasProp = {}.hasOwnProperty,
     __extends = function(child, parent) { for (var key in parent) { if (__hasProp.call(parent, key)) child[key] = parent[key]; } function ctor() { this.constructor = child; } ctor.prototype = parent.prototype; child.prototype = new ctor(); child.__super__ = parent.prototype; return child; };
 
@@ -949,7 +949,7 @@
 
   originRemove = Backbone.View.prototype.remove;
 
-  View = (function(_super) {
+  Frames.View = (function(_super) {
     __extends(View, _super);
 
     View.addToConfigureChain = function(fnName) {
@@ -998,12 +998,12 @@
 
   })(Backbone.View);
 
-  modula["export"]('frames/view', View);
+  modula["export"]('frames/view', Frames.View);
 
 }).call(this);
 
 (function() {
-  var Frames, Model, ViewModel,
+  var Frames, Model,
     __hasProp = {}.hasOwnProperty,
     __extends = function(child, parent) { for (var key in parent) { if (__hasProp.call(parent, key)) child[key] = parent[key]; } function ctor() { this.constructor = child; } ctor.prototype = parent.prototype; child.prototype = new ctor(); child.__super__ = parent.prototype; return child; };
 
@@ -1011,7 +1011,7 @@
 
   Model = modula.require('frames/model');
 
-  ViewModel = (function(_super) {
+  Frames.ViewModel = (function(_super) {
     __extends(ViewModel, _super);
 
     function ViewModel() {
@@ -1022,6 +1022,6 @@
 
   })(Model);
 
-  modula["export"]('frames/view_model', ViewModel);
+  modula["export"]('frames/view_model', Frames.ViewModel);
 
 }).call(this);
