@@ -22,6 +22,7 @@ sourceFiles = [
   'src/core/state.coffee'
   'src/core/*.coffee'
   'src/base/*_modules/*.coffee'
+  'src/base/extendables/*.coffee'
   'src/base/*.coffee'
 ]
 

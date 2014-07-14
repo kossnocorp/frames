@@ -32,6 +32,4 @@ class RoutersFactory extends Class
     $els = $root.find(ROUTERS_SELECTOR).add($root.filter(ROUTERS_SELECTOR))
     $els.map(-> $(@).data('router')).toArray()
 
-Frames.registerFactory(RoutersFactory, 'routers')
-
 modula.export('frames/routers_factory', RoutersFactory)

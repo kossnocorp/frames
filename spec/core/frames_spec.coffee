@@ -6,6 +6,7 @@ describe 'Frames', ->
     beforeEach ->
       Frames.Extendables.Module1 = class
         extended: ->
+        ready: ->
       Frames.Extendables.Module2 =  class
         extended: ->
 
@@ -50,6 +51,12 @@ describe 'Frames', ->
           arg1 = 'First extension argument'
           expect(-> Frames.extend('module3', arg1)).to.throw 'Trying to extend module Module3, but it is not registered.'
 
+    describe '@start', ->
+      it 'calls #ready method for each initialized extendable module', ->
+        readyFn = sinon.spy(Frames.extendables['module1'], 'ready')
+        Frames.start()
+        expect(readyFn).to.be.called
+
   describe 'launcher functional', ->
 
     beforeEach ->
@@ -60,72 +67,20 @@ describe 'Frames', ->
         hook: hookSpy
 
     describe '@registerLauncher', ->
-      it 'saves class of passed launcher', ->
-        Frames.registerLauncher(@Launcher)
-        expect(Frames.__LauncherClass).to.be.equal @Launcher
 
-    describe '@launch', ->
-      it 'launches Frames with previously saved launcher', ->
+      it 'creates instance of passed launcher', ->
         Frames.registerLauncher(@Launcher)
-        Frames.launch()
         expect(@contructorSpy).to.be.called
-
-      it 'throws error if no laucher class is registered', ->
-        Frames.__LauncherClass = null
-        expect(-> Frames.launch()).to.throw 'You try to launch Frames, but no launcher class is registered.'
 
     describe '@hook', ->
 
       it 'delegates hook call to registered launcher', ->
         callback = ->
         Frames.registerLauncher(@Launcher)
-        Frames.launch()
         Frames.hook('test', callback)
         expect(@hookSpy).to.be.calledWith('test', callback)
 
       it 'throws error if launcher is not registred', ->
         Frames.__launcher = undefined
         expect(-> Frames.hook('test', ->)).to.throw 'Launcher is not registered'
-
-  describe 'factories functional', ->
-
-    createFakeFactory = ->
-      class
-        @create: sinon.spy()
-        @destroy: sinon.spy()
-
-    beforeEach ->
-      Frames.factories = undefined
-      @FakeFactory = createFakeFactory()
-
-    describe '@start', ->
-
-      it 'runs create for every registred factory', ->
-        Frames.registerFactory(@FakeFactory)
-        Frames.start()
-        expect(@FakeFactory.create).to.be.called
-
-    describe '@stop', ->
-
-      it 'calls destroy for every registred factory', ->
-        Frames.registerFactory(@FakeFactory)
-        Frames.stop()
-        expect(@FakeFactory.destroy).to.be.called
-
-    describe '@registerFactory', ->
-
-      it 'saves class to factories', ->
-        Frames.registerFactory(@FakeFactory)
-        expect(Object.values(Frames.factories)).to.be.eql [@FakeFactory]
-
-      it 'allows to register one factory per id', ->
-        FakeFactoryA = createFakeFactory()
-        FakeFactoryB = createFakeFactory()
-        Frames.registerFactory(@FakeFactory)
-        Frames.registerFactory(FakeFactoryA, 'w00t')
-        Frames.registerFactory(FakeFactoryB, 'w00t')
-        expect(Object.values(Frames.factories)).to.be.eql [@FakeFactory, FakeFactoryB]
-
-      it 'returns factory id', ->
-        expect(Frames.registerFactory(@FakeFactory, 'w00t')).to.be.eq 'w00t'
 

@@ -66,6 +66,4 @@ class ViewsFactory extends Class
     else
       $els
 
-Frames.registerFactory(ViewsFactory, 'views')
-
 modula.export('frames/views_factory', ViewsFactory)
