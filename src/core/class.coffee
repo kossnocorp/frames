@@ -2,7 +2,7 @@ Frames = modula.require('frames')
 LoggerModule = modula.require('frames/logger_module')
 Backbone = window.Backbone
 
-class Class
+class @Class
 
   @include: (module) ->
     Object.merge(@::, Object.reject(module, 'included', 'extended'))

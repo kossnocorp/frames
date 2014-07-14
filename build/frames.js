@@ -27,11 +27,10 @@
 }).call(this);
 
 (function() {
-  var Frames,
-    __hasProp = {}.hasOwnProperty,
+  var __hasProp = {}.hasOwnProperty,
     __slice = [].slice;
 
-  Frames = (function() {
+  this.Frames = (function() {
     function Frames() {}
 
     Frames.Extendables = {};
@@ -142,7 +141,7 @@
 }).call(this);
 
 (function() {
-  var Backbone, Class, Frames, LoggerModule, klass, _i, _len, _ref;
+  var Backbone, Frames, LoggerModule, klass, _i, _len, _ref;
 
   Frames = modula.require('frames');
 
@@ -150,7 +149,7 @@
 
   Backbone = window.Backbone;
 
-  Class = (function() {
+  this.Class = (function() {
     function Class() {}
 
     Class.include = function(module) {
