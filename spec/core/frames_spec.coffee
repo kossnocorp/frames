@@ -71,32 +71,3 @@ describe 'Frames', ->
       it 'returns factory id', ->
         expect(Frames.registerFactory(@FakeFactory, 'w00t')).to.be.eq 'w00t'
 
-  describe '@export', ->
-
-    describe 'when modula is not defined', ->
-
-      beforeEach ->
-        @_modula = window.modula
-        delete window.modula
-        @TestModule = {}
-
-      afterEach ->
-        window.modula = @_modula
-
-      it 'saves exports as name into window', ->
-        Frames.export('test_module', @TestModule)
-        expect(window.TestModule).to.be.eq @TestModule
-        delete window.TestModule
-
-      it 'uses slash as namespace devider', ->
-        Frames.export('test/module', @TestModule)
-        expect(Test.Module).to.be.eq @TestModule
-        delete window.Test
-
-    describe 'when modula is defined', ->
-
-      it 'calls modula export', ->
-        spy = sinon.spy(modula, 'export')
-        Frames.export('test_module', @TestModule)
-        expect(spy).to.be.calledWith('test_module', @TestModule)
-        spy.restore()

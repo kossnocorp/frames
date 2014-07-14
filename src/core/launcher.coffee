@@ -9,8 +9,8 @@ class Launcher extends Class
     @__passedStages = ['loaded']
 
     events =
-      setReady: from: 'loaded', to: 'ready'
-      setCreated: from: 'ready', to: 'created'
+      setReady: {from: 'loaded', to: 'ready'}
+      setCreated: {from: 'ready', to: 'created'}
 
     states = ['loaded', 'ready', 'created']
 
