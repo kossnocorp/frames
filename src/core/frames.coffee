@@ -1,4 +1,4 @@
-class Frames
+class @Frames
 
   @Extendables: {}
 
