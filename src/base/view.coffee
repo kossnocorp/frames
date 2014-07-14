@@ -5,7 +5,7 @@ Backbone = window.Backbone
 
 originRemove = Backbone.View::remove
 
-class View extends Backbone.View
+class Frames.View extends Backbone.View
 
   @addToConfigureChain: (fnName) ->
     @configureChain ?= []
@@ -32,4 +32,4 @@ class View extends Backbone.View
 
     originRemove.call(@)
 
-modula.export('frames/view', View)
+modula.export('frames/view', Frames.View)
