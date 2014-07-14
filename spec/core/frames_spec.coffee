@@ -2,7 +2,10 @@ Frames = modula.require('frames')
 
 describe 'Frames', ->
 
-  describe 'extendables modules api', ->
+  it 'has .Extendables child namespace', ->
+    expect(Frames).to.have.property 'Extendables'
+
+  describe 'extendable modules api', ->
     beforeEach ->
       Frames.Extendables.Module1 = class
         extended: ->
@@ -15,9 +18,6 @@ describe 'Frames', ->
 
     afterEach ->
       Frames.Extendables = {}
-
-    it 'has .Extendables child namespace', ->
-      expect(Frames).to.have.property 'Extendables'
 
     describe '@createExtendables', ->
       it 'initializes extendable modules', ->
