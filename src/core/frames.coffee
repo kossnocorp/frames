@@ -9,8 +9,6 @@ class @Frames
         throw 'Trying to initialize extendable module, but #extended method is not specified for it.'
       @extendables[name.underscore()] = new klass()
 
-  @runExtendables: ->
-
   @extend: (moduleName, args...) ->
     unless @extendables[moduleName]?
       throw "Trying to extend module #{moduleName.camelize()}, but it is not registered."
