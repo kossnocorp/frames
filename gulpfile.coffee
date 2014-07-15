@@ -20,12 +20,13 @@ sourceFiles = [
   'src/core/class_modules/*.coffee'
   'src/core/class.coffee'
   'src/core/state.coffee'
-  'src/core/*_factory.coffee'
   'src/core/extendables/*.coffee'
-  'src/core/launcher.coffee'
 
+  'src/base/factories/*.coffee'
   'src/base/*_modules/*.coffee'
   'src/base/*.coffee'
+
+  'src/core/launcher.coffee'
 ]
 
 gulp.task 'build', ['karma:release'], ->
