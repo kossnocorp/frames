@@ -395,117 +395,6 @@
 }).call(this);
 
 (function() {
-  var Class, Frames, Launcher, State,
-    __hasProp = {}.hasOwnProperty,
-    __extends = function(child, parent) { for (var key in parent) { if (__hasProp.call(parent, key)) child[key] = parent[key]; } function ctor() { this.constructor = child; } ctor.prototype = parent.prototype; child.prototype = new ctor(); child.__super__ = parent.prototype; return child; };
-
-  Frames = modula.require('frames');
-
-  Class = modula.require('frames/class');
-
-  State = modula.require('frames/state');
-
-  Launcher = (function(_super) {
-    __extends(Launcher, _super);
-
-    function Launcher() {
-      var events, states;
-      this.__hooks = {};
-      this.__passedStages = ['loaded'];
-      Frames.createExtendables();
-      events = {
-        setReady: {
-          from: 'loaded',
-          to: 'ready'
-        },
-        setCreated: {
-          from: 'ready',
-          to: 'created'
-        }
-      };
-      states = ['loaded', 'ready', 'created'];
-      this.stage = new State('loaded', {
-        states: states,
-        events: events
-      });
-      this.stage.onReady = this.__stageTransition('ready', (function(_this) {
-        return function() {
-          Frames.start();
-          return setTimeout((function() {
-            return _this.stage.setCreated();
-          }), 0);
-        };
-      })(this));
-      this.stage.onCreated = this.__stageTransition('created');
-      this.__bindReady(this.setReady.bind(this));
-    }
-
-    Launcher.prototype.reset = function() {
-      this.__passedStages = ['loaded'];
-      return this.stage.reset();
-    };
-
-    Launcher.prototype.setReady = function() {
-      return this.stage.setReady();
-    };
-
-    Launcher.prototype.getStage = function() {
-      return this.stage.get();
-    };
-
-    Launcher.prototype.hook = function(stage, fn) {
-      var _base;
-      if ((_base = this.__hooks)[stage] == null) {
-        _base[stage] = [];
-      }
-      this.__hooks[stage].push(fn);
-      if (this.__passedStages.indexOf(stage) !== -1) {
-        return this.__call(fn);
-      }
-    };
-
-    Launcher.prototype.__bindReady = function(fn) {
-      return $(fn);
-    };
-
-    Launcher.prototype.__stageTransition = function(stage, after) {
-      return (function(_this) {
-        return function() {
-          _this.__passedStages.push(stage);
-          _this.__callStage(stage);
-          return typeof after === "function" ? after() : void 0;
-        };
-      })(this);
-    };
-
-    Launcher.prototype.__callStage = function(stage) {
-      var fn, _i, _len, _ref, _results;
-      if (this.__hooks[stage]) {
-        _ref = this.__hooks[stage];
-        _results = [];
-        for (_i = 0, _len = _ref.length; _i < _len; _i++) {
-          fn = _ref[_i];
-          _results.push(this.__call(fn));
-        }
-        return _results;
-      }
-    };
-
-    Launcher.prototype.__call = function(fn) {
-      return setTimeout(fn, 0);
-    };
-
-    return Launcher;
-
-  })(Class);
-
-  Frames.registerLauncher(Launcher);
-
-  modula["export"]('frames/launcher', Launcher);
-
-}).call(this);
-
-(function() {
   var Backbone, Class, Frames, RoutersFactory,
     __hasProp = {}.hasOwnProperty,
     __extends = function(child, parent) { for (var key in parent) { if (__hasProp.call(parent, key)) child[key] = parent[key]; } function ctor() { this.constructor = child; } ctor.prototype = parent.prototype; child.prototype = new ctor(); child.__super__ = parent.prototype; return child; };
@@ -727,6 +616,177 @@
 }).call(this);
 
 (function() {
+  var Frames,
+    __slice = [].slice;
+
+  Frames = modula.require('frames');
+
+  Frames.Extendables.RoutersFactory = (function() {
+    function RoutersFactory() {
+      this.routersFactory = modula.require('frames/routers_factory');
+    }
+
+    RoutersFactory.prototype.extended = function() {
+      var args, routersFactory;
+      args = 1 <= arguments.length ? __slice.call(arguments, 0) : [];
+      routersFactory = args[0];
+      return this.routersFactory = routersFactory;
+    };
+
+    RoutersFactory.prototype.ready = function() {
+      return this.routersFactory.create();
+    };
+
+    return RoutersFactory;
+
+  })();
+
+  modula["export"]('frames/extendables/routersFactory', Frames.Extendables.RoutersFactory);
+
+}).call(this);
+
+(function() {
+  var Frames,
+    __slice = [].slice;
+
+  Frames = modula.require('frames');
+
+  Frames.Extendables.ViewsFactory = (function() {
+    function ViewsFactory() {
+      this.viewsFactory = modula.require('frames/views_factory');
+    }
+
+    ViewsFactory.prototype.extended = function() {
+      var args, viewsFactory;
+      args = 1 <= arguments.length ? __slice.call(arguments, 0) : [];
+      viewsFactory = args[0];
+      return this.viewsFactory = viewsFactory;
+    };
+
+    ViewsFactory.prototype.ready = function() {
+      return this.viewsFactory.create();
+    };
+
+    return ViewsFactory;
+
+  })();
+
+  modula["export"]('frames/extendables/views_factory', Frames.Extendables.ViewsFactory);
+
+}).call(this);
+
+(function() {
+  var Class, Frames, Launcher, State,
+    __hasProp = {}.hasOwnProperty,
+    __extends = function(child, parent) { for (var key in parent) { if (__hasProp.call(parent, key)) child[key] = parent[key]; } function ctor() { this.constructor = child; } ctor.prototype = parent.prototype; child.prototype = new ctor(); child.__super__ = parent.prototype; return child; };
+
+  Frames = modula.require('frames');
+
+  Class = modula.require('frames/class');
+
+  State = modula.require('frames/state');
+
+  Launcher = (function(_super) {
+    __extends(Launcher, _super);
+
+    function Launcher() {
+      var events, states;
+      this.__hooks = {};
+      this.__passedStages = ['loaded'];
+      Frames.createExtendables();
+      events = {
+        setReady: {
+          from: 'loaded',
+          to: 'ready'
+        },
+        setCreated: {
+          from: 'ready',
+          to: 'created'
+        }
+      };
+      states = ['loaded', 'ready', 'created'];
+      this.stage = new State('loaded', {
+        states: states,
+        events: events
+      });
+      this.stage.onReady = this.__stageTransition('ready', (function(_this) {
+        return function() {
+          Frames.start();
+          return setTimeout((function() {
+            return _this.stage.setCreated();
+          }), 0);
+        };
+      })(this));
+      this.stage.onCreated = this.__stageTransition('created');
+      this.__bindReady(this.setReady.bind(this));
+    }
+
+    Launcher.prototype.reset = function() {
+      this.__passedStages = ['loaded'];
+      return this.stage.reset();
+    };
+
+    Launcher.prototype.setReady = function() {
+      return this.stage.setReady();
+    };
+
+    Launcher.prototype.getStage = function() {
+      return this.stage.get();
+    };
+
+    Launcher.prototype.hook = function(stage, fn) {
+      var _base;
+      if ((_base = this.__hooks)[stage] == null) {
+        _base[stage] = [];
+      }
+      this.__hooks[stage].push(fn);
+      if (this.__passedStages.indexOf(stage) !== -1) {
+        return this.__call(fn);
+      }
+    };
+
+    Launcher.prototype.__bindReady = function(fn) {
+      return $(fn);
+    };
+
+    Launcher.prototype.__stageTransition = function(stage, after) {
+      return (function(_this) {
+        return function() {
+          _this.__passedStages.push(stage);
+          _this.__callStage(stage);
+          return typeof after === "function" ? after() : void 0;
+        };
+      })(this);
+    };
+
+    Launcher.prototype.__callStage = function(stage) {
+      var fn, _i, _len, _ref, _results;
+      if (this.__hooks[stage]) {
+        _ref = this.__hooks[stage];
+        _results = [];
+        for (_i = 0, _len = _ref.length; _i < _len; _i++) {
+          fn = _ref[_i];
+          _results.push(this.__call(fn));
+        }
+        return _results;
+      }
+    };
+
+    Launcher.prototype.__call = function(fn) {
+      return setTimeout(fn, 0);
+    };
+
+    return Launcher;
+
+  })(Class);
+
+  Frames.registerLauncher(Launcher);
+
+  modula["export"]('frames/launcher', Launcher);
+
+}).call(this);
+
+(function() {
   var Frames, JqueryQueryModule;
 
   Frames = modula.require('frames');
@@ -800,66 +860,6 @@
   };
 
   modula["export"]('frames/pub_sub_module', PubSubModule);
-
-}).call(this);
-
-(function() {
-  var Frames,
-    __slice = [].slice;
-
-  Frames = modula.require('frames');
-
-  Frames.Extendables.RoutersFactory = (function() {
-    function RoutersFactory() {
-      this.routersFactory = modula.require('frames/routers_factory');
-    }
-
-    RoutersFactory.prototype.extended = function() {
-      var args, routersFactory;
-      args = 1 <= arguments.length ? __slice.call(arguments, 0) : [];
-      routersFactory = args[0];
-      return this.routersFactory = routersFactory;
-    };
-
-    RoutersFactory.prototype.ready = function() {
-      return this.routersFactory.create();
-    };
-
-    return RoutersFactory;
-
-  })();
-
-  modula["export"]('frames/extendables/routersFactory', Frames.Extendables.RoutersFactory);
-
-}).call(this);
-
-(function() {
-  var Frames,
-    __slice = [].slice;
-
-  Frames = modula.require('frames');
-
-  Frames.Extendables.ViewsFactory = (function() {
-    function ViewsFactory() {
-      this.viewsFactory = modula.require('frames/views_factory');
-    }
-
-    ViewsFactory.prototype.extended = function() {
-      var args, viewsFactory;
-      args = 1 <= arguments.length ? __slice.call(arguments, 0) : [];
-      viewsFactory = args[0];
-      return this.viewsFactory = viewsFactory;
-    };
-
-    ViewsFactory.prototype.ready = function() {
-      return this.viewsFactory.create();
-    };
-
-    return ViewsFactory;
-
-  })();
-
-  modula["export"]('frames/extendables/views_factory', Frames.Extendables.ViewsFactory);
 
 }).call(this);
 
