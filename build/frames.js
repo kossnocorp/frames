@@ -53,8 +53,6 @@
       return _results;
     };
 
-    Frames.runExtendables = function() {};
-
     Frames.extend = function() {
       var args, moduleName, _ref;
       moduleName = arguments[0], args = 2 <= arguments.length ? __slice.call(arguments, 1) : [];
