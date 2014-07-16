@@ -1,7 +1,7 @@
 /*! frames (v0.1.1),
  Front-end framework,
  by Sasha Koss <kossnocorp@gmail.com>
- Tue Jul 15 2014 */
+ Thu Jul 17 2014 */
 (function() {
   var modules;
 
@@ -822,15 +822,11 @@
 }).call(this);
 
 (function() {
-  var Backbone, Frames, JqueryQueryModule, PubSubModule, originRemove,
+  var Backbone, Frames, originRemove,
     __hasProp = {}.hasOwnProperty,
     __extends = function(child, parent) { for (var key in parent) { if (__hasProp.call(parent, key)) child[key] = parent[key]; } function ctor() { this.constructor = child; } ctor.prototype = parent.prototype; child.prototype = new ctor(); child.__super__ = parent.prototype; return child; };
 
   Frames = modula.require('frames');
-
-  PubSubModule = modula.require('frames/pub_sub_module');
-
-  JqueryQueryModule = modula.require('frames/jquery_query_module');
 
   Backbone = window.Backbone;
 
@@ -852,10 +848,6 @@
       }
       return this.removeChain.push(fnName);
     };
-
-    View.include(PubSubModule);
-
-    View.include(JqueryQueryModule);
 
     function View(options) {
       var configureChain, fnName, _i, _len;
