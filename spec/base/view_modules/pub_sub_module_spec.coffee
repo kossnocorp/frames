@@ -1,4 +1,8 @@
-View = modula.require('frames/view')
+BaseView = modula.require('frames/view')
+PubSubModule = modula.require('frames/pub_sub_module')
+
+class View extends BaseView
+  @include PubSubModule
 
 describe 'Frames.PubSubModule', ->
 
