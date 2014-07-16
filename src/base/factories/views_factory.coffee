@@ -1,5 +1,5 @@
-Frames = window.Frames or require('frames')
-Class = window.Frames?.Class or require('frames/class')
+Frames = modula.require('frames')
+Class = modula.require('frames/class')
 
 class ViewsFactory extends Class
 
@@ -66,6 +66,4 @@ class ViewsFactory extends Class
     else
       $els
 
-Frames.registerFactory(ViewsFactory, 'views')
-
-Frames.export('frames/views_factory', ViewsFactory)
+modula.export('frames/views_factory', ViewsFactory)

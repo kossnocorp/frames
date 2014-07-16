@@ -1,11 +1,9 @@
-Frames = window.Frames or require('frames')
-PubSubModule = Frames.PubSubModule or require('frames/pub_sub_module')
-JqueryQueryModule = Frames.JqueryQueryModule or require('frames/jquery_query_module')
+Frames = modula.require('frames')
 Backbone = window.Backbone
 
 originRemove = Backbone.View::remove
 
-class View extends Backbone.View
+class Frames.View extends Backbone.View
 
   @addToConfigureChain: (fnName) ->
     @configureChain ?= []
@@ -14,9 +12,6 @@ class View extends Backbone.View
   @addToRemoveChain: (fnName) ->
     @removeChain ?= []
     @removeChain.push(fnName)
-
-  @include PubSubModule
-  @include JqueryQueryModule
 
   constructor: (options) ->
     configureChain = @constructor.configureChain
@@ -32,4 +27,4 @@ class View extends Backbone.View
 
     originRemove.call(@)
 
-Frames.export('frames/view', View)
+modula.export('frames/view', Frames.View)

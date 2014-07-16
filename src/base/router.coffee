@@ -1,7 +1,7 @@
-Frames = window.Frames or require('frames')
+Frames = modula.require('frames')
 Backbone = window.Backbone
 
-class Router extends Backbone.Router
+class Frames.Router extends Backbone.Router
 
   _bindRoutes: ->
     @createEmitterAndReceiver()
@@ -21,4 +21,4 @@ class Router extends Backbone.Router
   unsubscribe: (message, callback, context) ->
     @broker.unsubscribe(message, callback, @)
 
-Frames.export('frames/router', Router)
+modula.export('frames/router', Frames.Router)

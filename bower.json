@@ -1,15 +1,12 @@
 {
   "name": "frames",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "homepage": "https://github.com/kossnocorp/frames",
   "authors": [
     "Sasha Koss <kossnocorp@gmail.com>"
   ],
   "description": "Front-end framework",
-
-  "devDependencies": {
-    "modula": ""
-  },
+  "main": "build/frames.min.js",
 
   "dependencies": {
     "jquery": "",

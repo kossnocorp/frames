@@ -1,4 +1,4 @@
-Frames = window.Frames or require('frames')
+Frames = modula.require('frames')
 
 class State
 
@@ -67,4 +67,4 @@ class State
     callbackName = "on_#{state}".camelize(false)
     @[callbackName]
 
-Frames.export('frames/state', State)
+modula.export('frames/state', State)

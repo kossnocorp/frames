@@ -1,6 +1,61 @@
-Frames = require('frames')
+Frames = modula.require('frames')
 
 describe 'Frames', ->
+
+  it 'has .Extendables child namespace', ->
+    expect(Frames).to.have.property 'Extendables'
+
+  describe 'extendable modules api', ->
+    beforeEach ->
+      Frames.Extendables.Module1 = class
+        extended: ->
+        ready: ->
+      Frames.Extendables.Module2 =  class
+        extended: ->
+
+      sinon.spy(Frames.Extendables, 'Module1')
+      sinon.spy(Frames.Extendables, 'Module2')
+
+    afterEach ->
+      Frames.Extendables = {}
+
+    describe '@createExtendables', ->
+      it 'initializes extendable modules', ->
+        Frames.createExtendables()
+        expect(Frames.Extendables.Module1).to.be.calledOnce
+        expect(Frames.Extendables.Module2).to.be.calledOnce
+
+      it 'saves extendable modules in @extendables with underscored keys', ->
+        Frames.createExtendables()
+        expect(Frames.extendables['module1']).to.be.instanceOf Frames.Extendables.Module1
+        expect(Frames.extendables['module2']).to.be.instanceOf Frames.Extendables.Module2
+
+      it 'throws error if #extended method is not specified for extendable module', ->
+        Frames.Extendables.Module2 =  class
+        expect(-> Frames.createExtendables()).to.throw 'Trying to initialize extendable module, but #extended method is not specified for it.'
+
+    describe '@extend', ->
+      context 'extendable module is specified', ->
+        it 'calls #extended method of registred extendable module', ->
+          sinon.spy(Frames.extendables['module1'], 'extended')
+          arg1 = 'First extension argument'
+          arg2 = 'Second extension argument'
+
+          expect(Frames.extendables['module1'].extended).to.not.be.called
+          Frames.extend('module1', arg1, arg2)
+          expect(Frames.extendables['module1'].extended).to.be.calledOnce
+          expect(Frames.extendables['module1'].extended.lastCall.args).to.be.eql [arg1, arg2]
+
+      context 'extendable module is not specified', ->
+        it 'throws error', ->
+          arg1 = 'First extension argument'
+          expect(-> Frames.extend('module3', arg1)).to.throw 'Trying to extend module Module3, but it is not registered.'
+
+    describe '@start', ->
+      it 'calls #ready method for each initialized extendable module', ->
+        readyFn = sinon.spy(Frames.extendables['module1'], 'ready')
+        Frames.start()
+        expect(readyFn).to.be.called
 
   describe 'launcher functional', ->
 
@@ -29,74 +84,3 @@ describe 'Frames', ->
         Frames.__launcher = undefined
         expect(-> Frames.hook('test', ->)).to.throw 'Launcher is not registered'
 
-  describe 'factories functional', ->
-
-    createFakeFactory = ->
-      class
-        @create: sinon.spy()
-        @destroy: sinon.spy()
-
-    beforeEach ->
-      Frames.factories = undefined
-      @FakeFactory = createFakeFactory()
-
-    describe '@start', ->
-
-      it 'runs create for every registred factory', ->
-        Frames.registerFactory(@FakeFactory)
-        Frames.start()
-        expect(@FakeFactory.create).to.be.called
-
-    describe '@stop', ->
-
-      it 'calls destroy for every registred factory', ->
-        Frames.registerFactory(@FakeFactory)
-        Frames.stop()
-        expect(@FakeFactory.destroy).to.be.called
-
-    describe '@registerFactory', ->
-
-      it 'saves class to factories', ->
-        Frames.registerFactory(@FakeFactory)
-        expect(Object.values(Frames.factories)).to.be.eql [@FakeFactory]
-
-      it 'allows to register one factory per id', ->
-        FakeFactoryA = createFakeFactory()
-        FakeFactoryB = createFakeFactory()
-        Frames.registerFactory(@FakeFactory)
-        Frames.registerFactory(FakeFactoryA, 'w00t')
-        Frames.registerFactory(FakeFactoryB, 'w00t')
-        expect(Object.values(Frames.factories)).to.be.eql [@FakeFactory, FakeFactoryB]
-
-      it 'returns factory id', ->
-        expect(Frames.registerFactory(@FakeFactory, 'w00t')).to.be.eq 'w00t'
-
-  describe '@export', ->
-
-    describe 'when modula is not defined', ->
-
-      beforeEach ->
-        @_modula = window.modula
-        delete window.modula
-        @TestModule = {}
-
-      afterEach ->
-        window.modula = @_modula
-
-      it 'saves exports as name into window', ->
-        Frames.export('test_module', @TestModule)
-        expect(window.TestModule).to.be.eq @TestModule
-        delete window.TestModule
-
-      it 'uses slash as namespace devider', ->
-        Frames.export('test/module', @TestModule)
-        expect(Test.Module).to.be.eq @TestModule
-        delete window.Test
-
-    describe 'when modula is defined', ->
-
-      it 'calls modula export', ->
-        spy = sinon.spy(modula, 'export')
-        Frames.export('test_module', @TestModule)
-        expect(spy).to.be.calledWith('test_module', @TestModule)
-        spy.restore()

@@ -1,4 +1,18 @@
-class Frames
+class @Frames
+
+  @Extendables: {}
+
+  @createExtendables: ->
+    @extendables ?= {}
+    for own name, klass of @Extendables
+      unless Object.isFunction(klass::extended)
+        throw 'Trying to initialize extendable module, but #extended method is not specified for it.'
+      @extendables[name.underscore()] = new klass()
+
+  @extend: (moduleName, args...) ->
+    unless @extendables[moduleName]?
+      throw "Trying to extend module #{moduleName.camelize()}, but it is not registered."
+    @extendables[moduleName].extended(args...)
 
   @registerLauncher: (Launcher) ->
     @__launcher = new Launcher()
@@ -8,38 +22,9 @@ class Frames
     @__launcher.hook(type, callback)
 
   @start: ->
-    return unless @factories
-    Factory.create() for id, Factory of @factories
+    extendable.ready?() for own name, extendable of @extendables
 
   @stop: ->
-    return unless @factories
-    Factory.destroy() for id, Factory of @factories
 
-  @registerFactory: (Factory, type) ->
-    @factoryCounter ?= 0
-    @factories ?= {}
-    id = type or "factory_#{@factoryCounter++}"
-    @factories[id] = Factory
-    id
+modula.export('frames', Frames)
 
-  @export: (name, Module) ->
-    if modula?
-      modula.export(name, Module)
-    else
-      @__exportToWindow(name, Module)
-
-  @__exportToWindow: (name, Module) ->
-    chunks = name.split('/')
-    lastChunk = chunks.pop()
-    @__getOrCreateNamespacePath(chunks)[@__classify(lastChunk)] = Module
-
-  @__getOrCreateNamespacePath: (chunks) ->
-    chunks.reduce(@__getOrCreateNamespaceChunk.bind(@), window)
-
-  @__getOrCreateNamespaceChunk: (object, chunk) ->
-    object[@__classify(chunk)] ?= {}
-
-  @__classify: (name) ->
-    name.camelize()
-
-Frames.export('frames', Frames)

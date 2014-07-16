@@ -1,6 +1,6 @@
-Frames = window.Frames or require('frames')
-Class = window.Frames?.Class or require('frames/class')
-State = window.Frames?.State or require('frames/state')
+Frames = modula.require('frames')
+Class = modula.require('frames/class')
+State = modula.require('frames/state')
 
 class Launcher extends Class
 
@@ -8,9 +8,11 @@ class Launcher extends Class
     @__hooks = {}
     @__passedStages = ['loaded']
 
+    Frames.createExtendables()
+
     events =
-      setReady: from: 'loaded', to: 'ready'
-      setCreated: from: 'ready', to: 'created'
+      setReady: {from: 'loaded', to: 'ready'}
+      setCreated: {from: 'ready', to: 'created'}
 
     states = ['loaded', 'ready', 'created']
 
@@ -58,4 +60,4 @@ class Launcher extends Class
 
 Frames.registerLauncher(Launcher)
 
-Frames.export('frames/launcher', Launcher)
+modula.export('frames/launcher', Launcher)
