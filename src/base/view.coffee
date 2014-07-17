@@ -14,11 +14,11 @@ class Frames.View extends Backbone.View
     @removeChain.push(fnName)
 
   constructor: (options) ->
-    super
-
     configureChain = @constructor.configureChain
     if configureChain
       @[fnName].call(@, options) for fnName in configureChain
+
+    super
 
   remove: ->
     removeChain = @constructor.removeChain
