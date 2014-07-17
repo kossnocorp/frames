@@ -40,7 +40,7 @@ class Launcher extends Class
     @__hooks[stage] ?= []
     @__hooks[stage].push(fn)
 
-    @__call(fn) if @__passedStages.indexOf(stage) isnt -1
+    fn() if @__passedStages.indexOf(stage) isnt -1
 
   __bindReady: (fn) ->
     $(fn)
@@ -53,10 +53,7 @@ class Launcher extends Class
 
   __callStage: (stage) ->
     if @__hooks[stage]
-      @__call(fn) for fn in @__hooks[stage]
-
-  __call: (fn) ->
-    setTimeout(fn, 0)
+      fn() for fn in @__hooks[stage]
 
 Frames.registerLauncher(Launcher)
 
