@@ -95,16 +95,6 @@ describe 'Launcher', ->
       expect(@launcher.getStage()).to.be.eq 'ready'
       expect(callback).to.be.called
 
-    it 'calls hooks asynchronous', ->
-      callbackA = sinon.spy()
-      callbackB = sinon.spy()
-      @launcher.hook('ready', callbackA)
-      @launcher.hook('ready', -> throw 'Ooops')
-      @launcher.hook('ready', callbackB)
-      @ready()
-      expect(callbackA).to.be.called
-      expect(callbackB).to.be.called
-
     describe 'pause function', ->
 
       it 'pauses initialization process until unpause will be called'
