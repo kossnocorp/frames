@@ -971,7 +971,7 @@
       }
       this.__hooks[stage].push(fn);
       if (this.__passedStages.indexOf(stage) !== -1) {
-        return this.__call(fn);
+        return fn();
       }
     };
 
@@ -996,14 +996,10 @@
         _results = [];
         for (_i = 0, _len = _ref.length; _i < _len; _i++) {
           fn = _ref[_i];
-          _results.push(this.__call(fn));
+          _results.push(fn());
         }
         return _results;
       }
-    };
-
-    Launcher.prototype.__call = function(fn) {
-      return setTimeout(fn, 0);
     };
 
     return Launcher;
