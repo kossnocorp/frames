@@ -851,7 +851,6 @@
 
     function View(options) {
       var configureChain, fnName, _i, _len;
-      View.__super__.constructor.apply(this, arguments);
       configureChain = this.constructor.configureChain;
       if (configureChain) {
         for (_i = 0, _len = configureChain.length; _i < _len; _i++) {
@@ -859,6 +858,7 @@
           this[fnName].call(this, options);
         }
       }
+      View.__super__.constructor.apply(this, arguments);
     }
 
     View.prototype.remove = function() {
