@@ -10,7 +10,7 @@ vendorFiles = [
   'bower_components/underscore/underscore.js'
   'bower_components/backbone/backbone.js'
   'bower_components/echoes/index.coffee'
-  'bower_components/noted/index.js'
+  'bower_components/noted/lib/noted.js'
 ]
 
 sourceFiles = karmaCliData.sourceFiles
