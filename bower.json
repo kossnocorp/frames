@@ -14,7 +14,7 @@
     "backbone": "",
     "sugar": "",
     "echoes": "https://raw.github.com/kossnocorp/echoes/master/src/echo.coffee",
-    "noted": "https://raw.github.com/kossnocorp/noted/master/lib/noted.js"
+    "noted": "0.1.2"
   },
 
   "license": "MIT",
