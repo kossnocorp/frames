@@ -1,5 +1,6 @@
 Frames = modula.require('frames')
 Backbone = window.Backbone
+PubSubModule = modula.require('frames/pub_sub_module')
 
 class Frames.Router extends Backbone.Router
 
@@ -8,7 +9,7 @@ class Frames.Router extends Backbone.Router
     Backbone.Router::_bindRoutes.call(@)
 
   createEmitterAndReceiver: ->
-    @broker = Frames.PubSubModule.broker
+    @broker = PubSubModule.broker
     @emitter = new Noted.Emitter(@broker, @)
     @receiver = new Noted.Receiver(@broker, @)
 
