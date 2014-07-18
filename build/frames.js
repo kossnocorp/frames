@@ -1,7 +1,7 @@
 /*! frames (v0.1.1),
  Front-end framework,
  by Sasha Koss <kossnocorp@gmail.com>
- Thu Jul 17 2014 */
+ Fri Jul 18 2014 */
 (function() {
   var modules;
 
@@ -775,13 +775,15 @@
 }).call(this);
 
 (function() {
-  var Backbone, Frames,
+  var Backbone, Frames, PubSubModule,
     __hasProp = {}.hasOwnProperty,
     __extends = function(child, parent) { for (var key in parent) { if (__hasProp.call(parent, key)) child[key] = parent[key]; } function ctor() { this.constructor = child; } ctor.prototype = parent.prototype; child.prototype = new ctor(); child.__super__ = parent.prototype; return child; };
 
   Frames = modula.require('frames');
 
   Backbone = window.Backbone;
+
+  PubSubModule = modula.require('frames/pub_sub_module');
 
   Frames.Router = (function(_super) {
     __extends(Router, _super);
@@ -796,7 +798,7 @@
     };
 
     Router.prototype.createEmitterAndReceiver = function() {
-      this.broker = Frames.PubSubModule.broker;
+      this.broker = PubSubModule.broker;
       this.emitter = new Noted.Emitter(this.broker, this);
       return this.receiver = new Noted.Receiver(this.broker, this);
     };
