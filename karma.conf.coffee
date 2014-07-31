@@ -11,6 +11,7 @@ vendorFiles = [
   'bower_components/backbone/backbone.js'
   'bower_components/echoes/index.coffee'
   'bower_components/noted/lib/noted.js'
+  'bower_components/vtree/build/vtree.js'
 ]
 
 sourceFiles = karmaCliData.sourceFiles

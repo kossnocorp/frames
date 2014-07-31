@@ -1,18 +1,15 @@
 Frames = modula.require 'frames'
-ViewsFactory = modula.require 'frames/views_factory'
 
 describe 'Frames.Extendables.ViewsFactory', ->
-  before ->
-    sinon.spy(ViewsFactory, 'create')
 
   beforeEach ->
     @extendable = new Frames.Extendables.ViewsFactory()
 
-  after ->
-    ViewsFactory.create.restore()
-
   context 'module is not extended', ->
     it 'uses default views factory by default', ->
+      ViewsFactory = @extendable.viewsFactory
+
+      sinon.spy(ViewsFactory, 'create')
       expect(ViewsFactory.create).to.be.not.called
       @extendable.ready()
       expect(ViewsFactory.create).to.be.called

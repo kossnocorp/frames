@@ -3,7 +3,8 @@ Frames = modula.require 'frames'
 class Frames.Extendables.ViewsFactory
 
   constructor: ->
-    @viewsFactory = modula.require 'frames/views_factory'
+    @viewsFactory =
+      create: -> Vtree.initNodes()
 
   extended: (args...) ->
     [viewsFactory] = args
