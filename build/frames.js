@@ -1,7 +1,7 @@
-/*! frames (v0.1.1),
+/*! frames (v0.1.2),
  Front-end framework,
  by Sasha Koss <kossnocorp@gmail.com>
- Fri Jul 18 2014 */
+ Mon Aug 25 2014 */
 (function() {
   var modules;
 
@@ -430,7 +430,11 @@
 
   Frames.Extendables.ViewsFactory = (function() {
     function ViewsFactory() {
-      this.viewsFactory = modula.require('frames/views_factory');
+      this.viewsFactory = {
+        create: function() {
+          return Vtree.initNodes();
+        }
+      };
     }
 
     ViewsFactory.prototype.extended = function() {
@@ -519,157 +523,6 @@
   })(Class);
 
   modula["export"]('frames/routers_factory', RoutersFactory);
-
-}).call(this);
-
-(function() {
-  var Class, Frames, ViewsFactory,
-    __hasProp = {}.hasOwnProperty,
-    __extends = function(child, parent) { for (var key in parent) { if (__hasProp.call(parent, key)) child[key] = parent[key]; } function ctor() { this.constructor = child; } ctor.prototype = parent.prototype; child.prototype = new ctor(); child.__super__ = parent.prototype; return child; };
-
-  Frames = modula.require('frames');
-
-  Class = modula.require('frames/class');
-
-  ViewsFactory = (function(_super) {
-    var ROOT_SELECTOR, VIEWS_SELECTOR, VIEW_NAME_SPLITTER, VIEW_PATH_WITH_COMPONENT_PATTERN;
-
-    __extends(ViewsFactory, _super);
-
-    function ViewsFactory() {
-      return ViewsFactory.__super__.constructor.apply(this, arguments);
-    }
-
-    VIEWS_SELECTOR = '[data-view]';
-
-    ROOT_SELECTOR = 'body';
-
-    VIEW_NAME_SPLITTER = /\s/;
-
-    VIEW_PATH_WITH_COMPONENT_PATTERN = /(.+)#(.+)/;
-
-    ViewsFactory.create = function($el, withRoot) {
-      if ($el == null) {
-        $el = $(ROOT_SELECTOR);
-      }
-      if (withRoot == null) {
-        withRoot = true;
-      }
-      return this.$viewEls($el, withRoot).each((function(_this) {
-        return function(index, el) {
-          return _this.createViewsForEl($(el));
-        };
-      })(this));
-    };
-
-    ViewsFactory.createViewsForEl = function(el) {
-      var $el, originViewPath, view, viewPath, viewPaths, _i, _len, _results;
-      $el = $(el);
-      if (!$el.data('created-views')) {
-        $el.data('created-views', {});
-      }
-      viewPaths = $el.data('view').split(VIEW_NAME_SPLITTER);
-      _results = [];
-      for (_i = 0, _len = viewPaths.length; _i < _len; _i++) {
-        originViewPath = viewPaths[_i];
-        viewPath = this.expandViewPath(originViewPath);
-        if (!$el.data('created-views')[viewPath]) {
-          view = this.initializeView(viewPath, {
-            el: $el
-          });
-          _results.push($el.data('created-views')[viewPath] = view);
-        } else {
-          _results.push(void 0);
-        }
-      }
-      return _results;
-    };
-
-    ViewsFactory.destroy = function($el, withRoot) {
-      if ($el == null) {
-        $el = $(ROOT_SELECTOR);
-      }
-      if (withRoot == null) {
-        withRoot = true;
-      }
-      return this.$viewEls($el, withRoot).each((function(_this) {
-        return function(index, el) {
-          return _this.destroyViewsForEl($(el));
-        };
-      })(this));
-    };
-
-    ViewsFactory.destroyViewsForEl = function(el) {
-      var $el, createdViews, view, viewName;
-      $el = $(el);
-      if (createdViews = $el.data('created-views')) {
-        for (viewName in createdViews) {
-          view = createdViews[viewName];
-          view.remove();
-        }
-        return $el.removeData('created-views');
-      }
-    };
-
-    ViewsFactory.expandViewPath = function(viewPath) {
-      if (VIEW_PATH_WITH_COMPONENT_PATTERN.test(viewPath)) {
-        return viewPath;
-      } else {
-        return 'shared#' + viewPath;
-      }
-    };
-
-    ViewsFactory.initializeView = function(viewPath, options) {
-      var ViewClass;
-      ViewClass = this.getViewClass(viewPath);
-      if (ViewClass) {
-        return new ViewClass(options);
-      }
-    };
-
-    ViewsFactory.getViewClass = function(viewPath) {
-      var ComponentClass, ViewClass, componentClassName, componentName, viewClassName, viewName, __, _ref;
-      _ref = viewPath.match(VIEW_PATH_WITH_COMPONENT_PATTERN), __ = _ref[0], componentName = _ref[1], viewName = _ref[2];
-      componentClassName = this.getComponentClassName(componentName);
-      viewClassName = this.getViewClassName(viewName);
-      ComponentClass = window[componentClassName];
-      if (ComponentClass && (ViewClass = ComponentClass[viewClassName])) {
-        return ViewClass;
-      }
-    };
-
-    ViewsFactory.getComponentClassName = function(componentName) {
-      if (componentName) {
-        return componentName.camelize() + 'Component';
-      }
-    };
-
-    ViewsFactory.getViewClassName = function(viewName) {
-      if (viewName) {
-        if (viewName) {
-          return viewName.camelize() + 'View';
-        }
-      }
-    };
-
-    ViewsFactory.$viewEls = function($el, withRoot) {
-      var $els;
-      if (withRoot == null) {
-        withRoot = true;
-      }
-      $els = $el.find(VIEWS_SELECTOR);
-      if (withRoot) {
-        return $els.add($el.filter(VIEWS_SELECTOR));
-      } else {
-        return $els;
-      }
-    };
-
-    return ViewsFactory;
-
-  })(Class);
-
-  modula["export"]('frames/views_factory', ViewsFactory);
 
 }).call(this);
 
