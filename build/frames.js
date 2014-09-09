@@ -1,7 +1,7 @@
-/*! frames (v0.1.2),
+/*! frames (v0.1.3),
  Front-end framework,
  by Sasha Koss <kossnocorp@gmail.com>
- Mon Aug 25 2014 */
+ Tue Sep 09 2014 */
 (function() {
   var modules;
 
